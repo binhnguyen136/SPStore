@@ -144,11 +144,7 @@
 
 
                 <ul class="awemenu awemenu-right">
-                    <li class="awemenu-item">
-                        <a href="{{ url('/') }}" title="">
-                            <span>Home</span>
-                        </a>
-                    </li>      
+    
 
                     @foreach($cateParentList as $cateParent)
                     <li class="awemenu-item">
@@ -195,17 +191,6 @@
                         
                     </li>                            
                     @endforeach
-
-                    <li class="awemenu-item">
-                        <a href="{{ url('picture') }}" title="">
-                            <span>Picture</span>
-                        </a>
-                    </li>
-                    <li class="awemenu-item">
-                        <a href="{{ url('about') }}" title="">
-                            <span>About</span>
-                        </a>
-                    </li>                            
 
                 </ul>
                 <!-- /.awemenu -->

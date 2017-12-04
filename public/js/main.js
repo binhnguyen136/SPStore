@@ -59,7 +59,7 @@ function aweMainSlider() {
                 var e = $(this),
                     o = e.find(".main-slider-item"),
                     a = e.find(".main-slider-image > img");
-                o.length && a.length && (o.addClass("background"), o.css("background-image", "url(" + a.attr("src") + ")"), a.css({
+                o.length && a.length && (o.addClass("background"), o.css("background-image", "url(" + a.attr("src") + ")"), o.css("height", "400px"), a.css({
                     opacity: 0,
                     visibility: "hidden"
                 }))

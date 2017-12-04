@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
-use App\Picture;
 use App\Product;
 use App\Category;
 use App\Slide;
@@ -23,7 +22,7 @@ class MyController extends Controller
         
         //$productList = DB::table('products')->orderBy('created_at')->limit(7)->get();
         
-        $productList = collect(DB::select('
+        $newItemList = collect(DB::select('
                         SELECT  product.id AS id,
                                 product.name AS name,
                                 product.image AS image,
@@ -54,14 +53,16 @@ class MyController extends Controller
                         LIMIT 7
                         '));
 
-        $pictureList = DB::table('pictures')->limit(8)->get();
+        $cateParentList = Category::whereRaw('id = parent_id AND ordinal > 0')->orderBy('ordinal')->get();
         
+        $productList = Product::all();
 
     	return view('page.home', 
-                    compact('slideList',  
-                            'productList', 
-                            'saleOffList',
-                            'pictureList'
+                    compact('slideList',
+                            'cateParentList',
+                            'productList',  
+                            'newItemList', 
+                            'saleOffList'
                             )
         );
     }
