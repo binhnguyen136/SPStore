@@ -55,7 +55,19 @@ class MyController extends Controller
 
         $cateParentList = Category::whereRaw('id = parent_id AND ordinal > 0')->orderBy('ordinal')->get();
         
-        $productList = Product::all();
+        $productList = collect(DB::select('
+                        SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.id AS cate_id,
+                                category.parent_id AS cate_parent_id
+                        FROM products product
+                        JOIN categories category 
+                        ON product.cate_id = category.id 
+                        '));
 
     	return view('page.home', 
                     compact('slideList',
