@@ -3471,7 +3471,7 @@ h2.entry-title {
     margin-bottom: 30px
 }
 .product-media {
-    background: #F7F7F7;
+    height: 232px;
     overflow: hidden;
     position: relative;
     z-index: 40

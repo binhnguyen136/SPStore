@@ -183,8 +183,9 @@
 
                     <div class="products owl-carousel" data-items="5">
 
+                    <?php $count = 0 ?>
                     @foreach( $productList as $product)
-                        @if( $product->cate_parent_id == $cate->id )
+                        @if( $product->cate_parent_id == $cate->id && $count++ <= 7)
                         <div class="product product-grid">
                             <div class="product-media">
                                 <div class="product-thumbnail">

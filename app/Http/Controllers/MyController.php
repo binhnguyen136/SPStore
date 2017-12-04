@@ -34,7 +34,7 @@ class MyController extends Controller
                         JOIN categories category
                         ON product.cate_id = category.id
                         ORDER BY product.created_at DESC
-                        LIMIT 7
+                        LIMIT 8
                         '));
         
         $saleOffList = collect(DB::select('
@@ -50,7 +50,7 @@ class MyController extends Controller
                         ON product.cate_id = category.id
                         WHERE primary_cost > cost
                         ORDER BY product.created_at DESC
-                        LIMIT 7
+                        LIMIT 8
                         '));
 
         $cateParentList = Category::whereRaw('id = parent_id AND ordinal > 0')->orderBy('ordinal')->get();

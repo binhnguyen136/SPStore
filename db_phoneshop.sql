@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 04, 2017 at 07:55 PM
+-- Generation Time: Dec 04, 2017 at 08:51 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -91,7 +91,11 @@ INSERT INTO `categories` (`id`, `parent_id`, `name`, `ordinal`, `created_at`, `u
 (3, 3, 'Laptop', 3, '2017-12-04 07:58:46', '2017-12-04 00:58:46'),
 (4, 4, 'Accessory', 4, '2017-12-04 08:24:26', '2017-12-04 01:24:26'),
 (5, 5, 'Sim', 5, '2017-12-04 08:24:32', '2017-12-04 01:24:32'),
-(6, 1, 'Samsung', 1, '2017-12-04 16:11:32', '2017-12-04 09:11:32');
+(6, 1, 'Samsung', 1, '2017-12-04 16:11:32', '2017-12-04 09:11:32'),
+(7, 1, 'Apple', 2, '2017-12-04 19:25:09', '2017-12-04 12:25:09'),
+(8, 2, 'Ipad', 0, '2017-12-04 12:32:09', '2017-12-04 12:32:09'),
+(9, 2, 'Galaxy Tab', 0, '2017-12-04 12:39:04', '2017-12-04 12:39:04'),
+(10, 3, 'Asus', 0, '2017-12-04 12:41:28', '2017-12-04 12:41:28');
 
 -- --------------------------------------------------------
 
@@ -192,7 +196,19 @@ INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `ca
 (4, 'Galaxy S8', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:07:44', '2017-12-04 09:07:44'),
 (5, 'Galaxy J7 pro', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:42:58', '2017-12-04 09:42:58'),
 (6, 'Galaxy Note 8', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:48:40', '2017-12-04 09:48:40'),
-(7, 'Galaxy A7', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:51:07', '2017-12-04 09:51:07');
+(7, 'Galaxy A7', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:51:07', '2017-12-04 09:51:07'),
+(8, 'Galaxy A5', 'samsung-galaxy-a5-2017-400x460.png', 'samsung-galaxy-a5-2017-400x460.png', 'samsung-galaxy-a5-2017-400x460.png', 'samsung-galaxy-a5-2017-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 12:18:10', '2017-12-04 12:18:10'),
+(9, 'Galaxy C9 pro', 'samsung-galaxy-c9-pro-1-400x460.png', 'samsung-galaxy-c9-pro-1-400x460.png', 'samsung-galaxy-c9-pro-1-400x460.png', 'samsung-galaxy-c9-pro-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 12:19:18', '2017-12-04 12:19:18'),
+(10, 'Galaxy J7 Prime', 'samsung-galaxy-j7-prime-h12-400x460.png', 'samsung-galaxy-j7-prime-h12-400x460.png', 'samsung-galaxy-j7-prime-h12-400x460.png', 'samsung-galaxy-j7-prime-h12-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 12:22:53', '2017-12-04 12:22:53'),
+(11, 'Iphone 8 plus', 'iphone-8-plus-256gb2-400x460.png', 'iphone-8-plus-256gb2-400x460.png', 'iphone-8-plus-256gb2-400x460.png', 'iphone-8-plus-256gb2-400x460.png', 7, 'This is apple smart phone', 5000000, 5000000, 0, '2017-12-04 12:26:23', '2017-12-04 12:26:23'),
+(12, 'Iphone 8', 'iphone-8-256gb2-400x460.png', 'iphone-8-256gb2-400x460.png', 'iphone-8-256gb2-400x460.png', 'iphone-8-256gb2-400x460.png', 7, 'This is apple smart phone', 5000000, 5000000, 0, '2017-12-04 12:28:03', '2017-12-04 12:28:03'),
+(13, 'Iphone 7 plus', 'iphone-7-plus-256gb-jet-black-3-400x460.png', 'iphone-7-plus-256gb-jet-black-3-400x460.png', 'iphone-7-plus-256gb-jet-black-3-400x460.png', 'iphone-7-plus-256gb-jet-black-3-400x460.png', 7, 'This is apple smart phone', 5000000, 5000000, 0, '2017-12-04 12:29:37', '2017-12-04 12:29:37'),
+(14, 'Iphone 7', 'iphone-7-256gb-5-400x460.png', 'iphone-7-256gb-5-400x460.png', 'iphone-7-256gb-5-400x460.png', 'iphone-7-256gb-5-400x460.png', 7, 'This is apple smart phone', 5000000, 5000000, 0, '2017-12-04 12:30:13', '2017-12-04 12:30:13'),
+(15, 'Ipad Pro', 'ipad-pro-105-inch-wifi-cellular-64gb-2017-400-400x460.png', 'ipad-pro-105-inch-wifi-cellular-64gb-2017-400-400x460.png', 'ipad-pro-105-inch-wifi-cellular-64gb-2017-400-400x460.png', 'ipad-pro-105-inch-wifi-cellular-64gb-2017-400-400x460.png', 8, 'this is ipad', 5000000, 5000000, 0, '2017-12-04 12:33:16', '2017-12-04 12:33:16'),
+(16, 'Ipad wifi', 'ipad-wifi-cellular-128gb-2017-400-400x460.png', 'ipad-wifi-cellular-128gb-2017-400-400x460.png', 'ipad-wifi-cellular-128gb-2017-400-400x460.png', 'ipad-wifi-cellular-128gb-2017-400-400x460.png', 8, 'this is ipad', 5000000, 5000000, 0, '2017-12-04 12:34:30', '2017-12-04 12:34:30'),
+(17, 'Ipad mini 4', 'ipad-mini-4-wifi-128gb-400-400x460.png', 'ipad-mini-4-wifi-128gb-400-400x460.png', 'ipad-mini-4-wifi-128gb-400-400x460.png', 'ipad-mini-4-wifi-128gb-400-400x460.png', 8, 'this is ipad', 5000000, 5000000, 0, '2017-12-04 12:36:59', '2017-12-04 12:36:59'),
+(18, 'Galaxy Tab A6', 'samsung-galaxy-tab-a-70-1-400x460.png', 'samsung-galaxy-tab-a-70-1-400x460.png', 'samsung-galaxy-tab-a-70-1-400x460.png', 'samsung-galaxy-tab-a-70-1-400x460.png', 9, 'this is galaxy tab', 5000000, 5000000, 0, '2017-12-04 12:40:15', '2017-12-04 12:40:15'),
+(19, 'Asus x441na', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 10, 'this is laptop', 5000000, 5000000, 0, '2017-12-04 12:42:22', '2017-12-04 12:42:22');
 
 -- --------------------------------------------------------
 
@@ -333,7 +349,7 @@ ALTER TABLE `cart_item`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `orders`
 --
@@ -353,7 +369,7 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `slides`
 --
