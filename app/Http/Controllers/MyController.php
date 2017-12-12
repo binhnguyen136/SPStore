@@ -23,14 +23,14 @@ class MyController extends Controller
         //$productList = DB::table('products')->orderBy('created_at')->limit(7)->get();
         
         $newItemList = collect(DB::select('
-                        CALL `NewItemsList`();
+                        CALL `new_items_list`();
                         '));
         
         $saleOffList = collect(DB::select('
-                        CALL `SaleOffList`();
+                        CALL `sale_off_list`();
                         '));
 
-        $cateParentList = collect(DB::select('CALL `cateParentList`();'));
+        $cateParentList = collect(DB::select('CALL `user_cate_parent_list`();'));
 
         $productList = collect(DB::select('
                         CALL `product_all`();
@@ -76,7 +76,7 @@ class MyController extends Controller
         }
 
         if($request->product_id){
-            $query1 = 'CALL `Product`(' . $request->product_id . ')';
+            $query1 = 'CALL `product`(' . $request->product_id . ')';
             $product = collect(DB::select($query1))->first();
 
             $cate = Category::findOrFail($product->cate_id);
