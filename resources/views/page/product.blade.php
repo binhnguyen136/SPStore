@@ -105,7 +105,7 @@
 
                 <div class="product-details-wrapper">
                     <h2 class="product-name">
-                        <a href="product-detail.html#" title=" Gin Lane Greenport Cotton Shirt"> Gin Lane Greenport Cotton Shirt</a>
+                        <a href="product-detail.html#" title=" Gin Lane Greenport Cotton Shirt">{{$product->name}}</a>
                     </h2>
                     <!-- /.product-name -->
 
@@ -196,7 +196,7 @@
                     <div class="product-meta">
                         <span class="product-category">
                 <span>Category:</span>
-                        <a href="product-detail.html#" title="">Outerwear</a>
+                        <a href="product-detail.html#" title="">{{$cate->name}}</a>
                         </span>
 
                         <span>-</span>
