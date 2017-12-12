@@ -23,50 +23,17 @@ class MyController extends Controller
         //$productList = DB::table('products')->orderBy('created_at')->limit(7)->get();
         
         $newItemList = collect(DB::select('
-                        SELECT  product.id AS id,
-                                product.name AS name,
-                                product.image AS image,
-                                product.image1 AS image1,
-                                product.primary_cost AS primary_cost,
-                                product.cost AS cost,
-                                category.name AS cate_name
-                        FROM products product 
-                        JOIN categories category
-                        ON product.cate_id = category.id
-                        ORDER BY product.created_at DESC
-                        LIMIT 8
+                        CALL `NewItemsList`();
                         '));
         
         $saleOffList = collect(DB::select('
-                        SELECT  product.id AS id,
-                                product.name AS name,
-                                product.image AS image,
-                                product.image1 AS image1,
-                                product.primary_cost AS primary_cost,
-                                product.cost AS cost,
-                                category.name AS cate_name
-                        FROM products product
-                        JOIN categories category
-                        ON product.cate_id = category.id
-                        WHERE primary_cost > cost
-                        ORDER BY product.created_at DESC
-                        LIMIT 8
+                        CALL `SaleOffList`();
                         '));
 
-        $cateParentList = Category::whereRaw('id = parent_id AND ordinal > 0')->orderBy('ordinal')->get();
-        
+        $cateParentList = collect(DB::select('CALL `cateParentList`();'));
+
         $productList = collect(DB::select('
-                        SELECT  product.id AS id,
-                                product.name AS name,
-                                product.image AS image,
-                                product.image1 AS image1,
-                                product.primary_cost AS primary_cost,
-                                product.cost AS cost,
-                                category.id AS cate_id,
-                                category.parent_id AS cate_parent_id
-                        FROM products product
-                        JOIN categories category 
-                        ON product.cate_id = category.id 
+                        CALL `product_all`();
                         '));
 
     	return view('page.home', 
@@ -79,13 +46,6 @@ class MyController extends Controller
         );
     }
 
-    public function category($type){
-    	$productList = Product::where('cat_id', $type)->get();
-    	$productAno = Product::where('cat_id', '<>', $type)->paginate(3);
-    	$cateList = Category::all();
-    	$cateCurr = Category::where('id', $type)->first();
-    	return view('page.category', compact('productList', 'productAno', 'cateList', 'cateCurr'));
-    }
 
 
     public function getLogin(){
@@ -97,7 +57,10 @@ class MyController extends Controller
     public function getProduct(Request $request){
 
         if($request->cate_id){
-            $productList = Product::where('cate_id', $request->cate_id )->get();
+            $query = 'CALL product_List(' . $request->cate_id . ')';
+
+             $productList = collect(DB::select($query));
+            // dd($productList);
             $cate = Category::findOrFail($request->cate_id);
 
             if( $productList->count() == 0 ){
@@ -113,11 +76,13 @@ class MyController extends Controller
         }
 
         if($request->product_id){
-            $product = Product::where('id', $request->product_id)->first();
+            $query1 = 'CALL `Product`(' . $request->product_id . ')';
+            $product = collect(DB::select($query1))->first();
 
             $cate = Category::findOrFail($product->cate_id);
-
-            $relatedList = Product::where('cate_id', $product->cate_id)->where('id', '<>', $product->id)->limit(7)->get();
+            $query2 = 'CALL `related_List`('.$product->cate_id.','.$product->id.')';
+            // $relatedList = Product::where('cate_id', $product->cate_id)->where('id', '<>', $product->id)->limit(7)->get();
+            $relatedList = collect(DB::select($query2));
 
             return view('page.product', 
                         compact(
@@ -141,18 +106,6 @@ class MyController extends Controller
 
         return view('page.contact');  
     }
-
-    public function getPicture(){
-        $pictureList = Picture::paginate(20);
-
-        $tagList = collect(DB::select('
-                    SELECT DISTINCT content
-                    FROM pictures
-                '));
-
-        return view('page.picture', ['pictureList' => $pictureList, 'tagList' => $tagList]);  
-    }
-
     public function getAddToCart(Request $request){
         if( isset($request->id) ){
             $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
