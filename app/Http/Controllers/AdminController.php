@@ -71,25 +71,15 @@ class AdminController extends Controller
     }
 
     public function getNav(){
-        $cateParentList = collect(DB::select('
-                    SELECT  cate.ordinal AS cate_ordinal,
-                            cate.id AS cate_id,
-                            cate.name AS cate_name,
-                            parent_cate.id AS parent_id,
-                            parent_cate.name AS parent_name
-                    FROM categories cate
-                    LEFT OUTER JOIN categories parent_cate
-                    ON cate.parent_id = parent_cate.id
-                    WHERE cate.id = cate.parent_id
-                    ORDER BY cate.ordinal
-                    '));
+        $cateParentList = collect(DB::select('CALL `admin_cate_parent_list`();'));
         $cateParentCount = $cateParentList->count();
-
         $cateList = array();
         $cateListCount = array();
+        //dd($cateParentList);
 
         foreach ($cateParentList as $cateParent) {
-            $list = Category::whereRaw('parent_id = ' . $cateParent->cate_id . ' AND id != ' . $cateParent->cate_id )->get();
+            //$list = Category::whereRaw('parent_id = ' . $cateParent->cate_id . ' AND id != ' . $cateParent->cate_id )->get();
+            $list = collect(DB::select('CALL `list_categories`('.$cateParent->cate_id.')'));
             $cateListCount[$cateParent->cate_id] = $list->count();
             $cateList[$cateParent->cate_id] = json_decode(json_encode($list));
         }
@@ -147,7 +137,9 @@ class AdminController extends Controller
         
         Slide::destroy($id);
 
-        if(Slide::where('image', $image)->get()->isEmpty())
+        //if(Slide::where('image', $image)->get()->isEmpty())
+            //File::delete( 'img/slides/' . $image );
+        if(call(DB::select('CALL `slide`('.$image.');')))
             File::delete( 'img/slides/' . $image );
     }
 
@@ -170,7 +162,7 @@ class AdminController extends Controller
 
         $slide->save();
 
-        if(isset($img) && Slide::where('image',$img)->get()->isEmpty())
+        if(isset($img) && call(DB::select('CALL `slide`('.$img.');'))->isEmpty())
             File::delete( 'img/slides/' . $img);
 
         return redirect()->back();
