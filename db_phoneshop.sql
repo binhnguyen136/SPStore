@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 12, 2017 lúc 09:41 SA
+-- Thời gian đã tạo: Th12 13, 2017 lúc 05:59 SA
 -- Phiên bản máy phục vụ: 5.7.14
 -- Phiên bản PHP: 7.0.10
 
@@ -24,16 +24,35 @@ DELIMITER $$
 --
 -- Thủ tục
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cateParentList` ()  BEGIN
-  SELECT *
-        FROM categories
-        WHERE id = parent_id
-        AND ordinal > 0
-        ORDER BY ordinal;
-        END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_cate_parent_list` ()  BEGIN
+	SELECT  cate.ordinal AS cate_ordinal,
+                            cate.id AS cate_id,
+                            cate.name AS cate_name,
+                            parent_cate.id AS parent_id,
+                            parent_cate.name AS parent_name
+                    FROM categories cate
+                    LEFT OUTER JOIN categories parent_cate
+                    ON cate.parent_id = parent_cate.id
+                    WHERE cate.id = cate.parent_id
+                    ORDER BY cate.ordinal;
+END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `NewItemsList` ()  BEGIN
-  SELECT  product.id AS id,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_categories` ()  BEGIN
+	SELECT cate.id AS cate_id, 
+                            cate.name AS cate_name,
+                            cate.parent_id AS parent_id, 
+                            parent_cate.name AS parent_name 
+                    FROM categories cate
+                    LEFT OUTER JOIN categories parent_cate
+                    ON cate.parent_id = parent_cate.id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_categories_ID` (IN `id` INT(11))  BEGIN
+	select * from categories where categories.parent_id = id AND categories.id != id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `new_items_list` ()  BEGIN
+	SELECT  product.id AS id,
                                 product.name AS name,
                                 product.image AS image,
                                 product.image1 AS image1,
@@ -47,8 +66,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `NewItemsList` ()  BEGIN
                         LIMIT 8;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `Product` (IN `id` INT(11))  BEGIN
-  select * from products where products.id = id;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `product` (IN `id` INT(11))  BEGIN
+	select * from products where products.id = id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product_all` ()  BEGIN
@@ -66,16 +85,16 @@ SELECT  product.id AS id,
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product_list` (IN `type` INT(11))  BEGIN
-  SELECT * FROM products
+	SELECT * FROM products
     WHERE cate_id = type;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `related_List` (IN `cate_id` INT(11), IN `id` INT(11))  BEGIN
-  select * from products where products.cate_id = cate_id AND products.id != id LIMIT 7;
+	select * from products where products.cate_id = cate_id AND products.id != id LIMIT 7;
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SaleOffList` ()  BEGIN
-  SELECT  product.id AS id,
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sale_off_list` ()  BEGIN
+	SELECT  product.id AS id,
                                 product.name AS name,
                                 product.image AS image,
                                 product.image1 AS image1,
@@ -89,6 +108,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SaleOffList` ()  BEGIN
                         ORDER BY product.created_at DESC
                         LIMIT 8;
 END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `slide` (IN `img` VARCHAR(255))  BEGIN
+	SELECT * from slides where slides.image = img;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_cate_parent_list` ()  BEGIN
+	SELECT *
+        FROM categories
+        WHERE id = parent_id
+        AND ordinal > 0
+        ORDER BY ordinal;
+        END$$
 
 DELIMITER ;
 
@@ -164,7 +195,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `parent_id`, `name`, `ordinal`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Mobile', 1, '2017-12-04 07:58:11', '2017-12-04 00:58:11'),
+(1, 1, 'Mobile', 1, '2017-12-12 16:52:42', '2017-12-12 09:52:42'),
 (2, 2, 'Tablet', 2, '2017-12-04 07:58:53', '2017-12-04 00:58:53'),
 (3, 3, 'Laptop', 3, '2017-12-04 07:58:46', '2017-12-04 00:58:46'),
 (4, 4, 'Accessory', 4, '2017-12-04 08:24:26', '2017-12-04 01:24:26'),
@@ -310,9 +341,9 @@ CREATE TABLE `slides` (
 --
 
 INSERT INTO `slides` (`id`, `image`, `title`, `content`, `link`, `ordinal`, `created_at`, `updated_at`) VALUES
-(1, '01_12_2017_10_25_40_Samsung-Big-Note-8-800-300-GIF-1.gif', '.', '.', '...', 1, '2017-12-04 07:22:04', '2017-12-04 00:22:04'),
-(2, '28_11_2017_11_07_28_iphoneX-800-300.png', '.', '.', '...', 2, '2017-12-04 00:22:20', '2017-12-04 00:22:20'),
-(5, '100000_nokia8-760x325-1.jpg', '.', '.', '...', 3, '2017-12-04 00:49:20', '2017-12-04 00:49:20');
+(1, '01_12_2017_10_25_40_Samsung-Big-Note-8-800-300-GIF-1.gif', 'Galaxy N 8', '.', '...', 1, '2017-12-12 16:12:50', '2017-12-12 09:12:50'),
+(5, '100000_nokia8-760x325-1.jpg', '.', '.', '...', 3, '2017-12-04 00:49:20', '2017-12-04 00:49:20'),
+(7, '28_11_2017_11_07_28_iphoneX-800-300.png', 'x', 'IP X', 'google.com', 2, '2017-12-12 09:13:43', '2017-12-12 09:13:43');
 
 -- --------------------------------------------------------
 
@@ -331,6 +362,13 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', NULL, NULL, 'GXLP0n6C3VHE4vufDYR6oJKftZp43NL9iNlDNV4aFVavtd2xJ9A6edjeY6cu', '2017-12-12 03:49:40', '2017-12-12 03:50:36');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -452,12 +490,12 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT cho bảng `slides`
 --
 ALTER TABLE `slides`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Các ràng buộc cho các bảng đã đổ
 --

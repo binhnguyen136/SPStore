@@ -79,7 +79,7 @@ class AdminController extends Controller
 
         foreach ($cateParentList as $cateParent) {
             //$list = Category::whereRaw('parent_id = ' . $cateParent->cate_id . ' AND id != ' . $cateParent->cate_id )->get();
-            $list = collect(DB::select('CALL `list_categories`('.$cateParent->cate_id.')'));
+            $list = collect(DB::select('CALL `list_categories_ID`('.$cateParent->cate_id.')'));
             $cateListCount[$cateParent->cate_id] = $list->count();
             $cateList[$cateParent->cate_id] = json_decode(json_encode($list));
         }
@@ -170,15 +170,8 @@ class AdminController extends Controller
     }
 
     public function getCategory(){
-        $cateList = collect(DB::select('
-                    SELECT cate.id AS cate_id, 
-                            cate.name AS cate_name,
-                            cate.parent_id AS parent_id, 
-                            parent_cate.name AS parent_name 
-                    FROM categories cate
-                    LEFT OUTER JOIN categories parent_cate
-                    ON cate.parent_id = parent_cate.id
-                    '));
+        $cateList = collect(DB::select('CALL `list_categories`();'));
+        //dd($cateList);
     	return view('admin.category', compact('cateList'));
     }
 
@@ -207,19 +200,21 @@ class AdminController extends Controller
 
     public function postEditCategory(Request $request){
         $cate = Category::find($request->cat_id);
+        
 
         if($request->cat_name)
             $cate->name = $request->cat_name;
         if($request->cat_parent)
-            $cate->parent_id = $request->cat_parent;
-
+            $cate->parent_id = $request->cat_parent;;
         $cate->save();
 
         return redirect()->back();      
     }
 
     public function getRemoveCategory($id){
-        if(Product::where('cate_id', $id)->get()->isEmpty() && Category::where('parent_id', $id)->where('id', '!=', $id)->get()->isEmpty()){
+        //Category::where('parent_id', $id)->where('id', '!=', $id)->get()\
+        //viết cho Product::where
+        if(Product::where('cate_id', $id)->get()->isEmpty() && collect(DB::select('CALL `list_categories_ID`('.$id.');'))->isEmpty()){
             Category::destroy($id);
             return redirect()->back();
         }
