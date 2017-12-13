@@ -46,6 +46,10 @@
                 <i class="fa fa-plus-square green"></i>
                 Thêm sản phẩm
             </button>
+            <div style="margin: 0 5px;"></div>
+            <button type="button" class="btn green" data-target="#full-width-import" data-toggle="modal">
+                Nhập hàng
+            </button>
 
             <select name="" class="filter form-control" id="cate-filter" onchange="initPage()">
                 <option value="0">Tất cả danh mục</option>
@@ -343,7 +347,72 @@
 </div>
 <!-- END MODAL BOXES !-->
 
+<!-- START MODAL BOXES !-->
+<div id="full-width-import" class="modal container fade" tabindex="-1">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Nhập hàng</h4>
+    </div>
+    <div class="modal-body">
+<div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <form action="" class="form-horizontal form-bordered" method="POST" enctype="multipart/form-data">
+            {{ csrf_field() }}
+                <div class="form-body">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Tên sản phẩm</label>
+                        <div class="col-md-9">
+                        <select name="product_id" class="form-control" id="product_id">
+                            @foreach( $productListAll as $pro )
+                            <option value="{{ $pro->id }}">{{ $pro->name }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Số lượng</label>
+                        <div class="col-md-9">
+                            <input type="hidden" name="pro_quantity"/>
+                            <input type="text" name="quantity" class="form-control" id="quantity" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <button type="submit" class="btn green">
+                                        <i class="fa fa-check"></i> Lưu</button>
+                                    <button type="button" data-dismiss="modal" class="btn btn-outline dark">Đóng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- END FORM-->
+        </div>
+
+    </div>
+</div>
+<!-- END MODAL BOXES !-->
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{ asset('js/select2.js') }}"></script>
+
 <script>
+        
+
+        $('#product_id').select2({
+            placeholder: 'Select...',
+            width: '100%',
+            maximumSelectionLength: 3,
+          });
 
     document.getElementById('cate-filter').value = '{{ $cate_id }}' != '' ? '{{ $cate_id }}' : 0;
 

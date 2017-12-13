@@ -74,7 +74,6 @@ class AdminController extends Controller
         $cateParentCount = $cateParentList->count();
         $cateList = array();
         $cateListCount = array();
-        //dd($cateParentList);
 
         foreach ($cateParentList as $cateParent) {
             //$list = Category::whereRaw('parent_id = ' . $cateParent->cate_id . ' AND id != ' . $cateParent->cate_id )->get();
@@ -82,8 +81,6 @@ class AdminController extends Controller
             $cateListCount[$cateParent->cate_id] = $list->count();
             $cateList[$cateParent->cate_id] = json_decode(json_encode($list));
         }
-
-        //dd($cateList);
 
         return view('admin.nav', compact('cateParentList', 'cateParentCount', 'cateList', 'cateListCount'));
     }
@@ -228,8 +225,9 @@ class AdminController extends Controller
             $productList = Product::paginate(5);
         $cateList = Category::whereRaw('id != parent_id')->get();
         $cate_id = request('cate_id');
-    	
-        return view('admin.product', compact('productList', 'cateList', 'cate_id'));
+        $productListAll = collect(DB::select('CALL product_all();'));
+        
+        return view('admin.product', compact('productList','productListAll', 'cateList', 'cate_id'));
     }
 
     public function postProduct(Request $request){

@@ -64,13 +64,6 @@
                                     @yield('productSelected')
                                 </a>
                             </li>
-                            <li class="nav-item @yield('imActive')">
-                                <a href="{{ url('admin/import') }}" class="nav-link">
-                                    <i class="icon-pin"></i>
-                                    <span class="title">Nhập kho</span>
-                                    @yield('imSelected')
-                                </a>
-                            </li>
 
                             <li class="heading">
                                 <h3 class="uppercase">Tài khoản</h3>
