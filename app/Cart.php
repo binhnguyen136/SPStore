@@ -48,8 +48,17 @@ class Cart
 
 				if($item->id == $id){
 					if($quantity != null) $item->decrease($quantity);
+<<<<<<< HEAD
 					else $item->decrease()
 					$this->totalPrice -= $quantity ? $item->cost*$quantity : $item->cost;
+=======
+					else $item->decrease();
+					
+					if($quantity && $item->cost*$quantity <= $this->totalPrice)
+						$this->totalPrice -= $quantity ? $item->cost*$quantity : $item->cost;
+					else
+						$this->totalPrice = 0;
+>>>>>>> 38808c7c2ae0ae2047b3a2f4d798a5d1bd9195b4
 
 					if($item->quantity < 1){
 						unset($this->itemList[$key]);
