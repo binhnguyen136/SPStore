@@ -81,7 +81,7 @@
                             <h2>Your payment details</h2>
 
                             <div class="payment-detail-wrapper">
-                                @if( isset($itemList) )
+                                @if( isset($itemList) && count($itemList) > 0)
                                 <ul class="cart-list">
 
                                     @foreach( $itemList as $item )
