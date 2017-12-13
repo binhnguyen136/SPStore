@@ -1,11 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.6.4
--- https://www.phpmyadmin.net/
---
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 13, 2017 lúc 05:59 SA
--- Phiên bản máy phục vụ: 5.7.14
--- Phiên bản PHP: 7.0.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -85,8 +77,107 @@ SELECT  product.id AS id,
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product_list` (IN `type` INT(11))  BEGIN
+<<<<<<< HEAD
 	SELECT * FROM products
     WHERE cate_id = type;
+=======
+  SELECT  product.id AS id,
+          product.name AS name,
+          product.image AS image,
+          product.image1 AS image1,
+          product.primary_cost AS primary_cost,
+          product.cost AS cost,
+          category.id AS cate_id,
+          category.parent_id AS cate_parent_id
+  FROM products product
+  JOIN categories category 
+  ON product.cate_id = category.id
+  WHERE category.id = type
+  OR category.parent_id = type; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `related_List` (IN `cate_id` INT(11), IN `id` INT(11))  BEGIN
+  select * from products where products.cate_id = cate_id AND products.id != id LIMIT 7;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SaleOffList` ()  BEGIN
+  SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.name AS cate_name
+                        FROM products product
+                        JOIN categories category
+                        ON product.cate_id = category.id
+                        WHERE primary_cost > cost
+                        ORDER BY product.created_at DESC
+                        LIMIT 8;
+END$$
+
+DELIMITER ;
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cateParentList` ()  BEGIN
+  SELECT *
+        FROM categories
+        WHERE id = parent_id
+        AND ordinal > 0
+        ORDER BY ordinal;
+        END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `NewItemsList` ()  BEGIN
+  SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.name AS cate_name
+                        FROM products product 
+                        JOIN categories category
+                        ON product.cate_id = category.id
+                        ORDER BY product.created_at DESC
+                        LIMIT 8;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Product` (IN `id` INT(11))  BEGIN
+  select * from products where products.id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `product_all` ()  BEGIN
+SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.id AS cate_id,
+                                category.parent_id AS cate_parent_id
+                        FROM products product
+                        JOIN categories category 
+                        ON product.cate_id = category.id; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `product_list` (IN `type` INT(11))  BEGIN
+SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.id AS cate_id,
+                                category.parent_id AS cate_parent_id
+                        FROM products product
+                        JOIN categories category 
+                        ON product.cate_id = category.id
+                        WHERE category.id = type
+                        OR category.parent_id = type; 
+>>>>>>> 3a0e74fa55eb6c53a7994e1e327aaa6127b4546f
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `related_List` (IN `cate_id` INT(11), IN `id` INT(11))  BEGIN
@@ -364,6 +455,7 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+<<<<<<< HEAD
 -- Đang đổ dữ liệu cho bảng `users`
 --
 
@@ -371,7 +463,20 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `rem
 (1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', NULL, NULL, 'GXLP0n6C3VHE4vufDYR6oJKftZp43NL9iNlDNV4aFVavtd2xJ9A6edjeY6cu', '2017-12-12 03:49:40', '2017-12-12 03:50:36');
 
 --
+=======
+<<<<<<< HEAD
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'binhnguyen', 'quangbinh136@gmail.com', '$2y$10$XyWgK6NS50o3P10YD6MYPureN3JnNM37aCJZP41H.GObGlhvxRyZW', NULL, NULL, 'COUnqhEiZYHWgTAuTEGyQhzRUhXqz9sa17k0vlsAN6T5YwdgzK2qKpJpjiMQ', '2017-12-12 10:00:05', '2017-12-12 19:23:07');
+
+--
+-- Indexes for dumped tables
+=======
+>>>>>>> 3a0e74fa55eb6c53a7994e1e327aaa6127b4546f
 -- Chỉ mục cho các bảng đã đổ
+>>>>>>> b1616164bd6af901bb5aac77df463d4a92cabec3
 --
 
 --

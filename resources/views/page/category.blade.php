@@ -69,7 +69,11 @@
 
                     @foreach( $productList as $product )
                      <div class="col-md-3 col-sm-3 col-xs-12">
+                        @if( $product->cost < $product->primary_cost )
+                        <div class="product product-grid" style="margin-bottom: 10px">
+                        @else
                         <div class="product product-grid">
+                        @endif
                            <div class="product-media">
                               <div class="product-thumbnail">
                                  <img src="{{ asset('img/products/' . $product->image ) }}" alt="" class="current">
@@ -128,7 +132,7 @@
                       <h3 class="widget-title">{{ $parentCat->name }}</h3>
 
                       <ul>
-                         <li class="active"><a href="products-grid.html#" title="">All Clothing</a>
+                         <li class="active"><a href="{{ url('product?cate_id=' .$parentCat->id) }}" title="">All Items</a>
                          </li>
                          @foreach( $cateList as $cat )
                          @if( $cat->parent_id == $parentCat->id )
