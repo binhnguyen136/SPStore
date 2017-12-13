@@ -29,14 +29,14 @@ class Cart
 				if($item->id == $id){
 					if($quantity != null) $item->increase($quantity);
 					else $item->increase();
-					$this->totalPrice += $item->cost;
+					$this->totalPrice += $quantity ? $item->cost*$quantity : $item->cost;
 					return;
 				}
 			}
 
 			$cartItem = new CartItem($id, $quantity);
 			array_push( $this->itemList, $cartItem);
-			$this->totalPrice += $cartItem->cost;
+			$this->totalPrice += $quantity ? $cartItem->cost*$quantity : $cartItem->cost;
 			
 		}
 	}
@@ -47,8 +47,9 @@ class Cart
 			foreach( $this->itemList as $key => $item ){
 
 				if($item->id == $id){
-					$item->decrease();
-					$this->totalPrice -= $item->cost;
+					if($quantity != null) $item->decrease($quantity);
+					else $item->decrease();
+					$this->totalPrice -= $quantity ? $item->cost*$quantity : $item->cost;
 
 					if($item->quantity < 1){
 						unset($this->itemList[$key]);

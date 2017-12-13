@@ -119,7 +119,7 @@ class MyController extends Controller
     public function getRemoveCart(Request $request){
         if( isset($request->id) ){
             $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
-            $cart->remove($request->id);
+            $cart->remove($request->id, $request->quantity);
             Session::put('cart', $cart);
             return view('page.cart', ['cart' => $cart->itemList, 'totalPrice' => $cart->totalPrice]);
         }else{

@@ -79,27 +79,30 @@
         }
 
         var removeCart = id => {
-            $.ajax({
-                headers: {
-                    'X-CSRF-Token': $('input[name="_token"]').val()
-                },                
-                type: 'post',
-                url: "{{ url('remove-cart') }}",
-                data: {
-                    id: id
-                },
-                success: function(response){
-                  $("#cart").html(response);
-                  count = $('#data-count').attr('data-count');
-                  if(count > 0)
-                    $("#count").html( count );
-                  else{
-                    $('#count').html(' ');
-                    $("#count").removeClass('cart-number');
-                  }
-                  alert('Remove product successfully');                
-                }
-            });
+            var quantity = window.prompt('Enter the quantity', 1);
+            if(!isNaN(quantity) && quantity > 0)
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('input[name="_token"]').val()
+                    },                
+                    type: 'post',
+                    url: "{{ url('remove-cart') }}",
+                    data: {
+                        id: id,
+                        quantity : quantity
+                    },
+                    success: function(response){
+                    $("#cart").html(response);
+                    count = $('#data-count').attr('data-count');
+                    if(count > 0)
+                        $("#count").html( count );
+                    else{
+                        $('#count').html(' ');
+                        $("#count").removeClass('cart-number');
+                    }
+                    alert('Remove product successfully');                
+                    }
+                });
 
             if (typeof refreshCheckOut === "function") { 
                 refreshCheckOut();
