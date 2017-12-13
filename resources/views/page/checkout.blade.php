@@ -154,16 +154,22 @@
                             <!-- /.cart-total -->
 
                             <div class="cart-checkboxes">
+                                
                                 <!-- /.checkbox -->
 
                                 <div class="checkbox">
                                     <label>
-                                        <input type="radio" name="cart-radio" value="">
-                                        <span>SHIP COD</span> </br>
-                                        <input type="radio" name="cart-radio" value="">
-                                        <span>Credit Card</span> </br>
+                                        <input type="checkbox" value="">
+                                        <span>Ship COD</span>
                                     </label>
-                                    </br>
+                                </div>
+                                <!-- /.checkbox -->
+
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="">
+                                        <span>Credit Card</span>
+                                    </label>
 
                                     <ul class="list-payments list-inline">
                                         <li>
