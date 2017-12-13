@@ -9,7 +9,6 @@ use App\Http\Requests;
 use App\Product;
 use App\Category;
 use App\Slide;
-use App\Picture;
 
 use Auth;
 

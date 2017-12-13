@@ -161,7 +161,9 @@ Route::post('admin/edit-product', [
 Route::get('/home', 'HomeController@index');
 
 Route::get('/', 'MyController@index');
-Route::get('login', 'MyController@getLogin');
+
+Route::auth();
+
 Route::get('product', 'MyController@getProduct');
 Route::get('checkout', 'MyController@getCheckout');
 Route::get('contact', 'MyController@getContact');

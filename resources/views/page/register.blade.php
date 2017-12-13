@@ -43,36 +43,44 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="account-login">
+
+                    <div role="tabpanel" class="tab-pane active" id="account-register">
                         <form action="index.html" method="POST">
                             <div class="form-group">
-                                <label for="login-account">Account</label>
-                                <input type="text" class="form-control" id="login-account">
+                                <label for="register-username">Username <sup>*</sup>
+                                </label>
+                                <input type="text" class="form-control" id="register-username">
                             </div>
                             <!-- /.form-group -->
 
                             <div class="form-group">
-                                <label for="login-password">Password</label>
-                                <div class="hide-show-password-wrapper" style="position: relative; display: block; vertical-align: baseline; margin: 0px;"><input type="password" class="form-control hideShowPassword-field" id="login-password" data-show-password="true" style="margin: 0px; padding-right: 24px;"><button type="button" role="button" aria-label="Show Password" tabindex="0" class="hide-show-password-toggle hideShowPassword-toggle-show" aria-pressed="false" style="position: absolute; right: 0px; top: 50%;"><i class="fa fa-eye"></i></button></div>
+                                <label for="register-email">Email <sup>*</sup>
+                                </label>
+                                <input type="text" class="form-control" id="register-email">
                             </div>
                             <!-- /.form-group -->
 
-                            <div class="forgot-passwd hidden">
-                                <a href="index.html#" title="">
-                                    <i class="icon icon-key"></i>
-                                    <span>Forgot your password?</span>
-                                </a>
+                            <div class="form-group">
+                                <label for="register-password">Password <sup>*</sup>
+                                </label>
+                                <input type="password" class="form-control" id="register-password">
                             </div>
-                            <!-- /.forgot-passwd -->
+                            <!-- /.form-group -->
+
+                            <div class="form-group">
+                                <label for="register-confirm-password">Confirm Password <sup>*</sup>
+                                </label>
+                                <input type="password" class="form-control" id="register-confirm-password">
+                            </div>
+                            <!-- /.form-group -->
 
                             <div class="form-button">
-                                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
+                                <button type="submit" class="btn btn-lg btn-warning btn-block">Register</button>
                             </div>
-                            <!-- /.form-group -->
+                            <!-- /.form-button -->
                         </form>
                     </div>
                     <!-- /.tab-pane -->
-
                 </div>
                 <!-- /.tab-content -->
             </div>

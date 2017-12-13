@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 04, 2017 at 08:51 PM
+-- Generation Time: Dec 13, 2017 at 04:06 AM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -13,6 +13,89 @@ SET time_zone = "+00:00";
 --
 -- Database: `phoneshop`
 --
+
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cateParentList` ()  BEGIN
+  SELECT *
+        FROM categories
+        WHERE id = parent_id
+        AND ordinal > 0
+        ORDER BY ordinal;
+        END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `NewItemsList` ()  BEGIN
+  SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.name AS cate_name
+                        FROM products product 
+                        JOIN categories category
+                        ON product.cate_id = category.id
+                        ORDER BY product.created_at DESC
+                        LIMIT 8;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `Product` (IN `id` INT(11))  BEGIN
+  select * from products where products.id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `product_all` ()  BEGIN
+SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.id AS cate_id,
+                                category.parent_id AS cate_parent_id
+                        FROM products product
+                        JOIN categories category 
+                        ON product.cate_id = category.id; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `product_list` (IN `type` INT(11))  BEGIN
+SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.id AS cate_id,
+                                category.parent_id AS cate_parent_id
+                        FROM products product
+                        JOIN categories category 
+                        ON product.cate_id = category.id
+                        WHERE category.id = type
+                        OR category.parent_id = type; 
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `related_List` (IN `cate_id` INT(11), IN `id` INT(11))  BEGIN
+  select * from products where products.cate_id = cate_id AND products.id != id LIMIT 7;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SaleOffList` ()  BEGIN
+  SELECT  product.id AS id,
+                                product.name AS name,
+                                product.image AS image,
+                                product.image1 AS image1,
+                                product.primary_cost AS primary_cost,
+                                product.cost AS cost,
+                                category.name AS cate_name
+                        FROM products product
+                        JOIN categories category
+                        ON product.cate_id = category.id
+                        WHERE primary_cost > cost
+                        ORDER BY product.created_at DESC
+                        LIMIT 8;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -190,7 +273,7 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `cate_id`, `detail`, `primary_cost`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 07:27:11', '2017-12-04 07:27:11'),
+(1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 4000000, 0, '2017-12-12 07:57:52', '2017-12-04 07:27:11'),
 (2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 07:33:12', '2017-12-04 07:33:12'),
 (3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:04:30', '2017-12-04 09:04:30'),
 (4, 'Galaxy S8', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:07:44', '2017-12-04 09:07:44'),
@@ -253,6 +336,13 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'binhnguyen', 'quangbinh136@gmail.com', '$2y$10$XyWgK6NS50o3P10YD6MYPureN3JnNM37aCJZP41H.GObGlhvxRyZW', NULL, NULL, 'COUnqhEiZYHWgTAuTEGyQhzRUhXqz9sa17k0vlsAN6T5YwdgzK2qKpJpjiMQ', '2017-12-12 10:00:05', '2017-12-12 19:23:07');
 
 --
 -- Indexes for dumped tables
@@ -379,7 +469,7 @@ ALTER TABLE `slides`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Constraints for dumped tables
 --

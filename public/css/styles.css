@@ -3788,7 +3788,7 @@ h2.entry-title {
     border: 2px solid #333
 }
 .product-slider-main {
-    background: #f7f7f7
+    background: transparent;
 }
 .product-slider-main .swiper-button-next,
 .product-slider-main .swiper-button-prev {
@@ -6593,6 +6593,7 @@ h2.product-name {
     }
 }
 .login-popup {
+    margin-top: 120px;
     padding: 0;
     max-width: 370px
 }

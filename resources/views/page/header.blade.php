@@ -17,24 +17,33 @@
                                 <li>
                                     <div class="container-fluid">
                                         <div class="header-account">
+                                            @if( Auth::check() )
                                             <div class="header-account-avatar">
                                                 <a href="index.html#" title="">
-                                                    <img src="img/samples/avatars/customers/1.jpg" alt="" class="img-circle">
+                                                    <img src="{{ asset('img/samples/avatars/customers/2.jpg') }}" alt="" class="img-circle">
                                                 </a>
                                             </div>
 
                                             <div class="header-account-username">
-                                                <h4><a href="index.html#">Binh Nguyen</a></h4>
+                                                <h4><a href="">{{ Auth::user()->name ? Auth::user()->name : Auth::user()->email }}</a></h4>
                                             </div>
 
                                             <ul>
-                                                <li><a href="index.html#">Invite Friends</a>
+                                                <li><a href="">Account Infomation</a>
                                                 </li>
-                                                <li><a href="index.html#">Account Infomation</a>
-                                                </li>
-                                                <li><a href="index.html#">Logout</a>
+                                                <li><a href="{{ url('logout') }}">Logout</a>
                                                 </li>
                                             </ul>
+
+                                            @else
+                                            <ul>
+                                                <li><a href="{{ url('login') }}">Log in</a>
+                                                </li>
+                                                <li><a href="{{ url('register') }}">Register</a>
+                                                </li>
+                                            </ul>
+
+                                            @endif
                                         </div>
                                     </div>
                                 </li>

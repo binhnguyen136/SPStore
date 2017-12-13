@@ -35,7 +35,6 @@ class MyController extends Controller
         $productList = collect(DB::select('
                         CALL `product_all`();
                         '));
-
     	return view('page.home', 
                     compact('slideList',
                             'cateParentList',
@@ -59,7 +58,7 @@ class MyController extends Controller
         if($request->cate_id){
             $query = 'CALL product_List(' . $request->cate_id . ')';
 
-             $productList = collect(DB::select($query));
+            $productList = collect(DB::select($query));
             // dd($productList);
             $cate = Category::findOrFail($request->cate_id);
 
