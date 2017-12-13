@@ -16,7 +16,7 @@
                         <div class="page-bar">
                             <ul class="page-breadcrumb">
                                 <li>
-                                    <a href="index.html">Home</a>
+                                    <a href="{{ url('/') }}">Home</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
                                 <li>
@@ -84,6 +84,7 @@
                                 <li><b>Giá gốc</b>: {{ $product->primary_cost }}</li>
                                 <li><b>Giá bán</b>: {{ $product->cost }}</li>
                                 <li><b>Giới thiệu</b>: {{ $product->detail }}</li>
+                                <li><b>Số lượng</b>: {{ $product->quantity }}</li>
                             </ul>
                         </td>
                         <td>
