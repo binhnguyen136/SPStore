@@ -36,79 +36,28 @@
                     <div class="col-md-6">
                         <h2>Billing Details</h2>
 
+                        <!-- /.form-group -->
                         <div class="form-group">
-                            <label for="country">Country <sup>*</sup>
+                            <label for="first_name">Name <sup>*</sup>
                             </label>
-                            <select name="country" id="country" class="form-control dark">
-                                <!-- option -->
-                            </select>
-                        </div>
-                        <!-- /.form-group -->
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="first_name">First Name <sup>*</sup>
-                                    </label>
-                                    <input type="text" class="form-control dark" id="first_name" placeholder="First Name">
-                                </div>
-                                <!-- /.form-group -->
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="last_name">Last Name <sup>*</sup>
-                                    </label>
-                                    <input type="text" class="form-control dark" id="last_name" placeholder="Last Name">
-                                </div>
-                                <!-- /.form-group -->
-                            </div>
+                            <input type="text" class="form-control dark" id="name" placeholder="Your name" value="{{ Auth::check() ? Auth::user()->name : ''}}">
                         </div>
 
-                        <div class="form-group">
-                            <label for="company-name">Company Name</label>
-                            <input type="text" class="form-control dark" id="company-name" placeholder="Company Name">
-                        </div>
                         <!-- /.form-group -->
 
                         <div class="form-group">
-                            <label for="address">Address*</label>
-                            <input type="text" class="form-control dark" id="address" placeholder="Street Address">
+                            <label for="address">Address<sup>*</sup></label>
+                            <input type="text" class="form-control dark" id="address" placeholder="Street Address" value="{{ Auth::check() ? Auth::user()->address : ''}}">
                         </div>
                         <!-- /.form-group -->
 
-                        <div class="form-group">
-                            <label for="address_2" class="sr-only"></label>
-                            <input type="text" class="form-control dark" id="address_2" placeholder="Apartment, suite, unit etc. (Optional)">
-                        </div>
-                        <!-- /.form-group -->
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="street-address">Town / City <sup>*</sup>
-                                    </label>
-                                    <input type="text" class="form-control dark" id="street-address" placeholder="Town / City">
-                                </div>
-                                <!-- /.form-group -->
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="town_country">Country <sup>*</sup>
-                                    </label>
-                                    <input type="text" class="form-control dark" id="town_country" placeholder="Country">
-                                </div>
-                                <!-- /.form-group -->
-                            </div>
-                        </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="email_address">Email Address <sup>*</sup>
                                     </label>
-                                    <input type="text" class="form-control dark" id="email_address" placeholder="Email Address">
+                                    <input type="text" class="form-control dark" id="email_address" placeholder="Email Address" value="{{ Auth::check() ? Auth::user()->email : ''}}">
                                 </div>
                                 <!-- /.form-group -->
                             </div>
@@ -117,25 +66,14 @@
                                 <div class="form-group">
                                     <label for="phone">Phone <sup>*</sup>
                                     </label>
-                                    <input type="text" class="form-control dark" id="phone" placeholder="Phone">
+                                    <input type="text" class="form-control dark" id="phone" placeholder="Phone" value="{{ Auth::check() ? Auth::user()->phone : ''}}">
                                 </div>
                                 <!-- /.form-group -->
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="order-notes">Order Notes</label>
-                            <textarea name="order-notes" id="order-notes" class="form-control dark" rows="3" placeholder="Notes about your order, eg. special notes for delivery"></textarea>
-                        </div>
                         <!-- /.form-group -->
 
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="">
-                                <span>Create an account?</span>
-                            </label>
-                        </div>
-                        <!-- /.checkbox -->
                     </div>
 
                     <div class="col-md-6">
@@ -192,11 +130,6 @@
                             <!-- /.payment-detail-wrapper -->
                             
 
-                            <div class="alert alert-dark">
-                                <p>You have a coupon? <strong><a href="checkout.html#" title="">Click here to enter your code</a></strong>
-                                </p>
-                            </div>
-                            <!-- /.alert -->
 
                             <div class="cart-total">
                                 <table>
@@ -221,30 +154,16 @@
                             <!-- /.cart-total -->
 
                             <div class="cart-checkboxes">
-
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="">
-                                        <span>Direct Bank Transfer</span>
-                                    </label>
-
-                                    <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                </div>
                                 <!-- /.checkbox -->
 
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">
-                                        <span>Cheque Payment</span>
+                                        <input type="radio" name="cart-radio" value="">
+                                        <span>SHIP COD</span> </br>
+                                        <input type="radio" name="cart-radio" value="">
+                                        <span>Credit Card</span> </br>
                                     </label>
-                                </div>
-                                <!-- /.checkbox -->
-
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" value="">
-                                        <span>Credit Card</span>
-                                    </label>
+                                    </br>
 
                                     <ul class="list-payments list-inline">
                                         <li>
