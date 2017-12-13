@@ -162,7 +162,6 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('/', 'MyController@index');
 
-Route::auth();
 
 Route::get('product', 'MyController@getProduct');
 Route::get('checkout', 'MyController@getCheckout');

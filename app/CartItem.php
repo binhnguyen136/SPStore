@@ -39,6 +39,9 @@ class CartItem
 	}
 
 	public function decrease( $num = null ){
-		$this->quantity -= ( $num !== null ? $num : 1 );
+		if($this->quantity >= $num)
+			$this->quantity -= ( $num !== null ? $num : 1 );
+		else 
+			$this->quantity = 0;
 	}
 }
