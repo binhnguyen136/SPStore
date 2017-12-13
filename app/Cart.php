@@ -48,7 +48,7 @@ class Cart
 
 				if($item->id == $id){
 					if($quantity != null) $item->decrease($quantity);
-					else $item->decrease();
+					else $item->decrease()
 					$this->totalPrice -= $quantity ? $item->cost*$quantity : $item->cost;
 
 					if($item->quantity < 1){
