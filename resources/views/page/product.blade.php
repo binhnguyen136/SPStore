@@ -128,7 +128,7 @@
                     <!-- /.product-stars -->
 
                     <div class="product-description">
-                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.</p>
+                        <p>{{$product->detail}}</p>
                     </div>
                     <!-- /.product-description -->
 

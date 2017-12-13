@@ -177,3 +177,7 @@ Route::get('destroy-session', 'MyController@destroySession');
 
 
 
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
