@@ -156,7 +156,7 @@ Route::post('admin/edit-product', [
 	'uses' => 'AdminController@postEditProduct'
 ]);
 
-//Route::auth();
+Route::post('admin/import', 'AdminController@postImport');
 
 Route::get('/home', 'HomeController@index');
 

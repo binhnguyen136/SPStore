@@ -356,7 +356,7 @@
     <div class="modal-body">
 <div class="portlet-body form">
             <!-- BEGIN FORM-->
-            <form action="" class="form-horizontal form-bordered" method="POST" enctype="multipart/form-data">
+            <form action="{{ url('admin/import') }}" class="form-horizontal form-bordered" method="POST" enctype="multipart/form-data">
             {{ csrf_field() }}
                 <div class="form-body">
 
@@ -408,11 +408,11 @@
 <script>
         
 
-        $('#product_id').select2({
-            placeholder: 'Select...',
-            width: '100%',
-            maximumSelectionLength: 3,
-          });
+    $('#product_id').select2({
+        placeholder: 'Select...',
+        width: '100%',
+        maximumSelectionLength: 3,
+        });
 
     document.getElementById('cate-filter').value = '{{ $cate_id }}' != '' ? '{{ $cate_id }}' : 0;
 

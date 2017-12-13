@@ -353,6 +353,15 @@ class AdminController extends Controller
 
     }
 
+    public function postImport(Request $request){
+        if($request->product_id && $request->quantity){
+            $product = Product::find($request->product_id);
+            $product->quantity += $request->quantity;
+            $product->save();
+        }
+        return redirect()->back();
+    }
+
     public function getPicture(){
         $pictureList = Picture::paginate(5);
 
