@@ -27,7 +27,8 @@ class Cart
 		if($product){
 			foreach( $this->itemList as $item ){
 				if($item->id == $id){
-					$item->increase();
+					if($quantity != null) $item->increase($quantity);
+					else $item->increase();
 					$this->totalPrice += $item->cost;
 					return;
 				}

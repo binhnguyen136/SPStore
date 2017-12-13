@@ -108,7 +108,7 @@ class MyController extends Controller
     public function getAddToCart(Request $request){
         if( isset($request->id) ){
             $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
-            $cart->add($request->id);
+            $cart->add($request->id, $request->quantity);
             Session::put('cart', $cart);
             return view('page.cart', ['cart' => $cart->itemList, 'totalPrice' => $cart->totalPrice]);
         }else{

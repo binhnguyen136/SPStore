@@ -149,8 +149,7 @@
                                 </div>
                                 <div style="text-align: center;">
                                     <input type="button" class="btn btn-lg btn-dark btn-outline" id="add_to_cart"
-                                        value="Add to cart" onclick="addToCart('{{ $product->id }}')" 
-                                    />
+                                        value="Add to cart" onclick="addToCart('{{ $product->id }}')" />
                                 </div>
                                 <!-- /.product-price -->
                             </div>

@@ -54,25 +54,28 @@
     <script type="text/javascript">
 
         var addToCart = id => {
-            $.ajax({
-                headers: {
-                    'X-CSRF-Token': $('input[name="_token"]').val()
-                },
-                type: 'post',
-                url: "{{ url('add-to-cart') }}",
-                data: {
-                    id : id
-                },
-                success:function(response) {
-                  $("#cart").html(response);
+            var quantity = window.prompt('Enter the quantity', 1);
+            if(!isNaN(quantity) && quantity > 0) 
+                $.ajax({
+                    headers: {
+                        'X-CSRF-Token': $('input[name="_token"]').val()
+                    },
+                    type: 'post',
+                    url: "{{ url('add-to-cart') }}",
+                    data: {
+                        id : id,
+                        quantity : quantity
+                    },
+                    success:function(response) {
+                    $("#cart").html(response);
 
-                  if( !$("#count").hasClass('cart-number') )
-                    $("#count").addClass('cart-number');
+                    if( !$("#count").hasClass('cart-number') )
+                        $("#count").addClass('cart-number');
 
-                  $("#count").html($('#data-count').attr('data-count'));
-                  alert('Add to cart successfully');
-                }
-            });
+                    $("#count").html($('#data-count').attr('data-count'));
+                    alert('Add to cart successfully');
+                    }
+                });
         }
 
         var removeCart = id => {
