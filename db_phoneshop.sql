@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 13, 2017 lúc 06:17 SA
+-- Thời gian đã tạo: Th12 13, 2017 lúc 08:44 SA
 -- Phiên bản máy phục vụ: 5.7.14
 -- Phiên bản PHP: 7.0.10
 
@@ -37,6 +37,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_cate_parent_list` ()  BEGIN
                     ORDER BY cate.ordinal;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `category_id` (IN `id` INT(11))  BEGIN
+	SELECT * from categories WHERE categories.id = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `list_categories` ()  BEGIN
 	SELECT cate.id AS cate_id, 
                             cate.name AS cate_name,
@@ -68,6 +72,10 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product` (IN `id` INT(11))  BEGIN
 	select * from products where products.id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `products_cate_id` (IN `cate_id` INT(11))  BEGIN
+	SELECT * FROM products WHERE products.cate_id = cate_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product_all` ()  BEGIN
@@ -118,10 +126,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sale_off_list` ()  BEGIN
                         WHERE primary_cost > cost
                         ORDER BY product.created_at DESC
                         LIMIT 8;
-END$$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `slide` (IN `img` VARCHAR(255))  BEGIN
-	SELECT * from slides where slides.image = img;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_cate_parent_list` ()  BEGIN
@@ -206,7 +210,7 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `parent_id`, `name`, `ordinal`, `created_at`, `updated_at`) VALUES
-(1, 1, 'Mobile', 1, '2017-12-12 16:52:42', '2017-12-12 09:52:42'),
+(1, 1, 'Mobile', 1, '2017-12-13 08:41:26', '2017-12-13 01:41:26'),
 (2, 2, 'Tablet', 2, '2017-12-04 07:58:53', '2017-12-04 00:58:53'),
 (3, 3, 'Laptop', 3, '2017-12-04 07:58:46', '2017-12-04 00:58:46'),
 (4, 4, 'Accessory', 4, '2017-12-04 08:24:26', '2017-12-04 01:24:26'),
@@ -215,7 +219,7 @@ INSERT INTO `categories` (`id`, `parent_id`, `name`, `ordinal`, `created_at`, `u
 (7, 1, 'Apple', 2, '2017-12-04 19:25:09', '2017-12-04 12:25:09'),
 (8, 2, 'Ipad', 0, '2017-12-04 12:32:09', '2017-12-04 12:32:09'),
 (9, 2, 'Galaxy Tab', 0, '2017-12-04 12:39:04', '2017-12-04 12:39:04'),
-(10, 3, 'Asus', 0, '2017-12-04 12:41:28', '2017-12-04 12:41:28');
+(10, 3, 'Asus/Dell', 1, '2017-12-13 08:42:05', '2017-12-13 01:42:05');
 
 -- --------------------------------------------------------
 
@@ -315,7 +319,7 @@ INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `ca
 (3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:04:30', '2017-12-04 09:04:30'),
 (4, 'Galaxy S8', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:07:44', '2017-12-04 09:07:44'),
 (5, 'Galaxy J7 pro', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:42:58', '2017-12-04 09:42:58'),
-(6, 'Galaxy Note 8', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:48:40', '2017-12-04 09:48:40'),
+(6, 'Galaxy Note 8', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 6, 'This is Galaxy Note 8', 5000000, 4000000, 0, '2017-12-13 08:42:57', '2017-12-13 01:42:57'),
 (7, 'Galaxy A7', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 'samsung-galaxy-a7-2017-4-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:51:07', '2017-12-04 09:51:07'),
 (8, 'Galaxy A5', 'samsung-galaxy-a5-2017-400x460.png', 'samsung-galaxy-a5-2017-400x460.png', 'samsung-galaxy-a5-2017-400x460.png', 'samsung-galaxy-a5-2017-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 12:18:10', '2017-12-04 12:18:10'),
 (9, 'Galaxy C9 pro', 'samsung-galaxy-c9-pro-1-400x460.png', 'samsung-galaxy-c9-pro-1-400x460.png', 'samsung-galaxy-c9-pro-1-400x460.png', 'samsung-galaxy-c9-pro-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 12:19:18', '2017-12-04 12:19:18'),
@@ -352,9 +356,8 @@ CREATE TABLE `slides` (
 --
 
 INSERT INTO `slides` (`id`, `image`, `title`, `content`, `link`, `ordinal`, `created_at`, `updated_at`) VALUES
-(1, '01_12_2017_10_25_40_Samsung-Big-Note-8-800-300-GIF-1.gif', 'Galaxy N 8', '.', '...', 1, '2017-12-12 16:12:50', '2017-12-12 09:12:50'),
-(5, '100000_nokia8-760x325-1.jpg', '.', '.', '...', 3, '2017-12-04 00:49:20', '2017-12-04 00:49:20'),
-(7, '28_11_2017_11_07_28_iphoneX-800-300.png', 'x', 'IP X', 'google.com', 2, '2017-12-12 09:13:43', '2017-12-12 09:13:43');
+(12, '01_12_2017_10_25_40_Samsung-Big-Note-8-800-300-GIF-1.gif', 'xxx', 'xx', 'google.com', 1, '2017-12-13 01:02:28', '2017-12-13 01:02:28'),
+(13, '28_11_2017_11_07_28_iphoneX-800-300.png', 'xwx', 'wxw', 'google.com', 2, '2017-12-13 01:02:39', '2017-12-13 01:02:39');
 
 -- --------------------------------------------------------
 
@@ -476,7 +479,7 @@ ALTER TABLE `cart_item`
 -- AUTO_INCREMENT cho bảng `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT cho bảng `orders`
 --
@@ -501,7 +504,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT cho bảng `slides`
 --
 ALTER TABLE `slides`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
