@@ -158,7 +158,7 @@ class AdminController extends Controller
 
         $slide->save();
 
-        if(isset($img) && call(DB::select('CALL `slide`('.$img.');'))->isEmpty())
+        if(isset($img) && collect(DB::select('CALL `slide`('.$img.');'))->isEmpty())
             File::delete( 'img/slides/' . $img);
 
         return redirect()->back();
