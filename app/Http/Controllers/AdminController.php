@@ -136,10 +136,9 @@ class AdminController extends Controller
         
         Slide::destroy($id);
 
-        //if(Slide::where('image', $image)->get()->isEmpty())
-            //File::delete( 'img/slides/' . $image );
-        if(call(DB::select('CALL `slide`('.$image.');')))
+        if(Slide::where('image', $image)->get()->isEmpty())
             File::delete( 'img/slides/' . $image );
+
     }
 
     public function postEditSlide(Request $request){
