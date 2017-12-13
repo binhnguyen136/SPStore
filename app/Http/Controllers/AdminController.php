@@ -35,7 +35,6 @@ class AdminController extends Controller
     }
 
     public function getInfo(){
-        //dd(storage_path());    
         if(File::exists(storage_path() . '/app/public/info')){
             $info = json_decode(Storage::get('public/info'));
         	return view('admin.info', compact('info'));
@@ -93,8 +92,10 @@ class AdminController extends Controller
     }
 
     public function getEditNav(Request $request){
-        $cate = Category::find($request->id);
+        //$tempt= 'CALL `category_id`('.$request->id.')';
+        //$cate = collect(DB::select($tempt))->first();
 
+        $cate = Category::find($request->id);
         if($cate->ordinal != $request->ordinal)
             $cate->ordinal = $request->ordinal;
         $cate->save();
@@ -136,10 +137,9 @@ class AdminController extends Controller
         
         Slide::destroy($id);
 
-        //if(Slide::where('image', $image)->get()->isEmpty())
-            //File::delete( 'img/slides/' . $image );
-        if(call(DB::select('CALL `slide`('.$image.');')))
-            File::delete( 'img/slides/' . $image );
+        if(Slide::where('image', $image)->get()->isEmpty())
+             File::delete( 'img/slides/' . $image );
+        
     }
 
     public function postEditSlide(Request $request){
@@ -211,9 +211,10 @@ class AdminController extends Controller
     }
 
     public function getRemoveCategory($id){
-        //Category::where('parent_id', $id)->where('id', '!=', $id)->get()\
+        //Category::where('parent_id', $id)->where('id', '!=', $id)->get()
+        //Product::where('cate_id', $id)->get()->isEmpty()
         //viết cho Product::where
-        if(Product::where('cate_id', $id)->get()->isEmpty() && collect(DB::select('CALL `list_categories_ID`('.$id.');'))->isEmpty()){
+        if(collect(DB::select('CALL `products_cate_id`('.$id.')'))->isEmpty() && collect(DB::select('CALL `list_categories_ID`('.$id.');'))->isEmpty()){
             Category::destroy($id);
             return redirect()->back();
         }
