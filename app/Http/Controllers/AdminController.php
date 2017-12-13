@@ -157,7 +157,7 @@ class AdminController extends Controller
         if($request->editOrdinal) $slide->ordinal = $request->editOrdinal;
 
         $slide->save();
-
+        
         if(isset($img) && Slide::where('image',$img)->get()->isEmpty())
             File::delete( 'img/slides/' . $img);
 

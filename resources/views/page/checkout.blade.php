@@ -81,7 +81,7 @@
                             <h2>Your payment details</h2>
 
                             <div class="payment-detail-wrapper">
-                                @if( $itemList )
+                                @if( isset($itemList) )
                                 <ul class="cart-list">
 
                                     @foreach( $itemList as $item )
