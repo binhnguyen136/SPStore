@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests;
 
 use App\Product;
 use App\Category;
 use App\Slide;
 use App\Cart;
+
 
 use DB;
 use Session;
@@ -35,6 +36,26 @@ class MyController extends Controller
         $productList = collect(DB::select('
                         CALL `product_all`();
                         '));
+        
+        if(Auth::check() && Session::has('cart'))
+        {   
+            $id = Auth::user()->id;
+            $cart = collect(DB::select('CALL `cart_find_id`('.$id.')'));
+            if( count($cart) == 0 ){
+                $oldCart = Session::get('cart');
+                $cart = new Cart($oldCart);
+                $tempt = 'CALL `cart_insert`('.$id.','.$cart->totalPrice.')';
+                DB::select($tempt);
+                foreach($cart->itemList as $item)
+                {
+                    $_cart = collect(DB::select('CALL `cart_find_id`('.$id.')'))->first();
+                    DB::select('CALL `cart_item_insert`('.$_cart->id.','.$item->id.','.$item->quantity.')');
+                }
+            }else {
+
+            }
+        }
+
     	return view('page.home', 
                     compact('slideList',
                             'cateParentList',
