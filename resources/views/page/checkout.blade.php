@@ -159,7 +159,7 @@
 
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">
+                                        <input type="radio" name="payment" value="1">
                                         <span>Ship COD</span>
                                     </label>
                                 </div>
@@ -167,7 +167,7 @@
 
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" value="">
+                                        <input type="radio" name="payment" value="2">
                                         <span>Credit Card</span>
                                     </label>
 
