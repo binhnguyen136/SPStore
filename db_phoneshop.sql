@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 15, 2017 lúc 06:49 SA
+-- Thời gian đã tạo: Th12 15, 2017 lúc 07:31 SA
 -- Phiên bản máy phục vụ: 5.7.14
 -- Phiên bản PHP: 7.0.10
 
@@ -326,7 +326,27 @@ CREATE TABLE `order_item` (
 INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
 (2, 1, 1, 4000000, 3, '2017-12-14 14:20:02', '2017-12-14 14:20:02'),
 (10, 1, 2, 4000000, 3, '2017-12-14 14:35:33', '2017-12-14 14:35:33'),
-(11, 1, 4, 5000000, 4, '2017-12-14 14:44:24', '2017-12-14 14:44:24');
+(11, 1, 4, 5000000, 4, '2017-12-14 14:44:24', '2017-12-14 14:44:24'),
+(12, 1, 1, 400000, 10, '2017-12-15 07:19:38', '2017-12-15 07:19:38'),
+(13, 1, 2, 400000, 20, '2017-12-15 07:20:55', '2017-12-15 07:20:55');
+
+--
+-- Bẫy `order_item`
+--
+DELIMITER $$
+CREATE TRIGGER `after_order_item_insert` AFTER INSERT ON `order_item` FOR EACH ROW BEGIN
+	DECLARE _order_item_product_id INT;
+    DECLARE _order_item_quantity INT;
+    DECLARE _product_quantity INT;
+    DECLARE _product_qtt_after INT;
+    SET _order_item_product_id = NEW.product_id;
+    SET _order_item_quantity =  NEW.quantity;
+    SET _product_quantity = (SELECT quantity FROM products WHERE products.id = _order_item_product_id);
+    SET _product_qtt_after = _product_quantity - _order_item_quantity;
+    UPDATE products SET products.quantity = _product_qtt_after WHERE products.id = _order_item_product_id;    
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -369,9 +389,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `cate_id`, `detail`, `primary_cost`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 4000000, 15, '2017-12-13 09:46:59', '2017-12-13 02:46:59'),
-(2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 07:33:12', '2017-12-04 07:33:12'),
-(3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:04:30', '2017-12-04 09:04:30'),
+(1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 4000000, 5, '2017-12-15 07:19:38', '2017-12-13 02:46:59'),
+(2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-15 07:20:55', '2017-12-04 07:33:12'),
+(3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 20, '2017-12-15 07:21:09', '2017-12-04 09:04:30'),
 (4, 'Galaxy S8', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:07:44', '2017-12-04 09:07:44'),
 (5, 'Galaxy J7 pro', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:42:58', '2017-12-04 09:42:58'),
 (6, 'Galaxy Note 8', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 6, 'This is Galaxy Note 8', 5000000, 4000000, 0, '2017-12-13 08:42:57', '2017-12-13 01:42:57'),
@@ -388,6 +408,34 @@ INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `ca
 (17, 'Ipad mini 4', 'ipad-mini-4-wifi-128gb-400-400x460.png', 'ipad-mini-4-wifi-128gb-400-400x460.png', 'ipad-mini-4-wifi-128gb-400-400x460.png', 'ipad-mini-4-wifi-128gb-400-400x460.png', 8, 'this is ipad', 5000000, 5000000, 0, '2017-12-04 12:36:59', '2017-12-04 12:36:59'),
 (18, 'Galaxy Tab A6', 'samsung-galaxy-tab-a-70-1-400x460.png', 'samsung-galaxy-tab-a-70-1-400x460.png', 'samsung-galaxy-tab-a-70-1-400x460.png', 'samsung-galaxy-tab-a-70-1-400x460.png', 9, 'this is galaxy tab', 5000000, 5000000, 0, '2017-12-04 12:40:15', '2017-12-04 12:40:15'),
 (19, 'Asus x441na', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 10, 'this is laptop', 5000000, 5000000, 0, '2017-12-04 12:42:22', '2017-12-04 12:42:22');
+
+--
+-- Bẫy `products`
+--
+DELIMITER $$
+CREATE TRIGGER `after_products_insert` AFTER INSERT ON `products` FOR EACH ROW BEGIN
+	DECLARE _product_primary_cost INT;
+    SET _product_primary_cost = NEW.primary_cost;
+    IF ( _product_primary_cost < 1000 )
+    THEN
+    	signal sqlstate '45000' 
+         set message_text = "Gia product khong duoc < 1000";
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_products_update` AFTER UPDATE ON `products` FOR EACH ROW BEGIN
+	DECLARE _products_quantity INT;
+    SET _products_quantity = NEW.quantity;
+    IF (_products_quantity < 0)
+    THEN
+    	signal sqlstate '45000' 
+         set message_text = "So luong product khong duoc am";
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -530,7 +578,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT cho bảng `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT cho bảng `categories`
 --
@@ -545,7 +593,7 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT cho bảng `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT cho bảng `password_resets`
 --
@@ -555,7 +603,7 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT cho bảng `slides`
 --
