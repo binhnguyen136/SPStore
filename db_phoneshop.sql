@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 15, 2017 lúc 07:31 SA
+-- Thời gian đã tạo: Th12 15, 2017 lúc 08:00 SA
 -- Phiên bản máy phục vụ: 5.7.14
 -- Phiên bản PHP: 7.0.10
 
@@ -390,7 +390,7 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `cate_id`, `detail`, `primary_cost`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
 (1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 4000000, 5, '2017-12-15 07:19:38', '2017-12-13 02:46:59'),
-(2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-15 07:20:55', '2017-12-04 07:33:12'),
+(2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 50, '2017-12-15 07:45:00', '2017-12-15 00:45:00'),
 (3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 20, '2017-12-15 07:21:09', '2017-12-04 09:04:30'),
 (4, 'Galaxy S8', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:07:44', '2017-12-04 09:07:44'),
 (5, 'Galaxy J7 pro', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:42:58', '2017-12-04 09:42:58'),
@@ -412,6 +412,26 @@ INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `ca
 --
 -- Bẫy `products`
 --
+DELIMITER $$
+CREATE TRIGGER `after_products_cost_insert` AFTER INSERT ON `products` FOR EACH ROW BEGIN
+	IF (NEW.primary_cost < NEW.cost)
+    THEN
+    	signal sqlstate '45000' 
+         set message_text = "Gia goc khong duoc nho hon gia ban";
+    END IF;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `after_products_cost_update` AFTER UPDATE ON `products` FOR EACH ROW BEGIN
+	IF (NEW.primary_cost < NEW.cost)
+    THEN
+    	signal sqlstate '45000' 
+         set message_text = "Gia goc khong duoc nho hon gia ban";
+    END IF;
+END
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `after_products_insert` AFTER INSERT ON `products` FOR EACH ROW BEGIN
 	DECLARE _product_primary_cost INT;
@@ -603,7 +623,7 @@ ALTER TABLE `password_resets`
 -- AUTO_INCREMENT cho bảng `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT cho bảng `slides`
 --
