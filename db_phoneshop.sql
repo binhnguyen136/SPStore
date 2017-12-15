@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 14, 2017 lúc 08:44 SA
+-- Thời gian đã tạo: Th12 15, 2017 lúc 06:49 SA
 -- Phiên bản máy phục vụ: 5.7.14
 -- Phiên bản PHP: 7.0.10
 
@@ -192,7 +192,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `customer_id`, `total`, `created_at`, `updated_at`) VALUES
-(16, 1, 32000000, '2017-12-14 08:42:22', '2017-12-14 08:42:22');
+(17, 1, 35000000, '2017-12-14 09:35:56', '2017-12-14 09:35:56');
 
 -- --------------------------------------------------------
 
@@ -210,12 +210,24 @@ CREATE TABLE `cart_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `cart_item`
+-- Bẫy `cart_item`
 --
-
-INSERT INTO `cart_item` (`id`, `cart_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(3, 16, 6, 3, '2017-12-14 08:42:22', '2017-12-14 08:42:22'),
-(4, 16, 19, 4, '2017-12-14 08:42:22', '2017-12-14 08:42:22');
+DELIMITER $$
+CREATE TRIGGER `after_cart_item_insert` AFTER INSERT ON `cart_item` FOR EACH ROW BEGIN
+	DECLARE _cart_item_qtt INT;
+    DECLARE _product_qtt INT;
+    DECLARE _cart_item_product_id INT;
+    SET _cart_item_product_id = (SELECT product_id FROM cart_item WHERE cart_item.id = NEW.id);
+    SET _cart_item_qtt = (SELECT quantity FROM cart_item WHERE cart_item.id = NEW.id);
+    SET _product_qtt = (SELECT quantity FROM products WHERE products.id = _cart_item_product_id);
+    IF (_cart_item_qtt > _product_qtt)
+    THEN
+    	signal sqlstate '45000' 
+         set message_text = "So luong product khong du";
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -284,6 +296,13 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Đang đổ dữ liệu cho bảng `orders`
+--
+
+INSERT INTO `orders` (`id`, `customer_id`, `status`, `total`, `payment`, `created_at`, `updated_at`) VALUES
+(1, 1, 'qwer', 134123431, 'COD', '2017-12-14 14:18:09', '2017-12-14 14:18:09');
+
 -- --------------------------------------------------------
 
 --
@@ -299,6 +318,15 @@ CREATE TABLE `order_item` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `order_item`
+--
+
+INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
+(2, 1, 1, 4000000, 3, '2017-12-14 14:20:02', '2017-12-14 14:20:02'),
+(10, 1, 2, 4000000, 3, '2017-12-14 14:35:33', '2017-12-14 14:35:33'),
+(11, 1, 4, 5000000, 4, '2017-12-14 14:44:24', '2017-12-14 14:44:24');
 
 -- --------------------------------------------------------
 
@@ -409,7 +437,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', '0917218297', 'HoChiMinh City', '73Mcb60UkOfa3Mn6Tf0YhUETv7XP0u1Ac527ixbZwYGY6eYmYfwOxxwI6IcQ', '2017-12-12 03:49:40', '2017-12-14 01:06:38'),
+(1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', '0917218297', 'HoChiMinh City', 'tZZsFSSgJWKVkH4iF9jQYAm8MLNVnCQBUrkjIrD7cWfDXyNbjPFPD8L4oEdv', '2017-12-12 03:49:40', '2017-12-14 02:35:25'),
 (2, 'namcool', 'nam10@gmail.com', '$2y$10$n4XBZapz.jHkSxwamcYrW.MX.90c4DO2VufAre04RxYxk/zXAgsVu', NULL, NULL, 'gFD17rATNyltaupMWCerPZtmjcVU1jZKXvKKM5twiH02CUmHfiuK4Xed8DNj', '2017-12-13 02:26:04', '2017-12-13 02:28:09');
 
 --
@@ -497,12 +525,12 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT cho bảng `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 --
 -- AUTO_INCREMENT cho bảng `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT cho bảng `categories`
 --
@@ -512,12 +540,12 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT cho bảng `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT cho bảng `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT cho bảng `password_resets`
 --
