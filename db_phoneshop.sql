@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 16, 2017 at 02:31 PM
+-- Generation Time: Dec 16, 2017 at 03:47 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -43,6 +43,13 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_insert` (IN `_id` INT(11), IN 
   INSERT INTO cart(customer_id,total,created_at,updated_at) VALUES (_id,_total,NOW(),NOW());
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_delete` (IN `cart_id` INT, IN `product_id` INT)  BEGIN
+  DELETE
+    FROM cart_item
+    WHERE cart_item.cart_id = cart_id
+    AND cart_item.product_id = product_id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_find_cartid` (IN `id` INT)  BEGIN
   SELECT * FROM cart_item WHERE cart_id = id;
 END$$
@@ -53,6 +60,13 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_insert` (IN `_cart_id` INT(11), IN `_product_id` INT(11), IN `_quantity` INT(11))  BEGIN
   INSERT INTO cart_item(cart_id,product_id,quantity,created_at,updated_at) VALUES (_cart_id,_product_id,_quantity,NOW(),NOW());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_update_quantity` (IN `cart_id` INT, IN `product_id` INT, IN `quantity` INT)  BEGIN
+  UPDATE cart_item 
+    SET cart_item.quantity = quantity
+    WHERE cart_item.cart_id = cart_id
+    AND cart_item.product_id = product_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `category_id` (IN `id` INT(11))  BEGIN
@@ -202,7 +216,7 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `customer_id`, `total`, `created_at`, `updated_at`) VALUES
-(45, 3, 14000000, '2017-12-16 08:53:31', '2017-12-16 08:53:31');
+(46, 3, 5000000, '2017-12-16 14:04:15', '2017-12-16 14:04:15');
 
 -- --------------------------------------------------------
 
@@ -218,6 +232,13 @@ CREATE TABLE `cart_item` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `cart_item`
+--
+
+INSERT INTO `cart_item` (`id`, `cart_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(178, 46, 3, 1, '2017-12-16 14:45:52', '2017-12-16 14:45:52');
 
 --
 -- Triggers `cart_item`
@@ -517,7 +538,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', '0917218297', 'HoChiMinh City', 'tZZsFSSgJWKVkH4iF9jQYAm8MLNVnCQBUrkjIrD7cWfDXyNbjPFPD8L4oEdv', '2017-12-12 03:49:40', '2017-12-14 02:35:25'),
 (2, 'namcool', 'nam10@gmail.com', '$2y$10$n4XBZapz.jHkSxwamcYrW.MX.90c4DO2VufAre04RxYxk/zXAgsVu', NULL, NULL, 'gFD17rATNyltaupMWCerPZtmjcVU1jZKXvKKM5twiH02CUmHfiuK4Xed8DNj', '2017-12-13 02:26:04', '2017-12-13 02:28:09'),
-(3, 'Binh Nguyen', 'quangbinh136@gmail.com', '$2y$10$ZmdQAcVDsquA6EWOtyM8nu0iqAUdFtw7Z.KI8GofZqrUQ3Iq.BbWC', NULL, NULL, 'KkRpa1Uk2ToxLKH4c9omUcma7ip0QGnT9uSyjxQfHpErulFvUxAkiWpY3WMY', '2017-12-15 08:24:27', '2017-12-16 02:48:28');
+(3, 'Binh Nguyen', 'quangbinh136@gmail.com', '$2y$10$ZmdQAcVDsquA6EWOtyM8nu0iqAUdFtw7Z.KI8GofZqrUQ3Iq.BbWC', NULL, NULL, 'DMBjAamsvWM1jmSEMliFhfnSaTmV3KbbTR1JYCXAZHDkOgFehl4vKq6EEljN', '2017-12-15 08:24:27', '2017-12-16 07:45:41');
 
 --
 -- Indexes for dumped tables
@@ -604,12 +625,12 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 --
 -- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
 --
 -- AUTO_INCREMENT for table `categories`
 --
