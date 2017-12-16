@@ -1,31 +1,25 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 15, 2017 lúc 09:16 SA
--- Phiên bản máy phục vụ: 5.7.14
--- Phiên bản PHP: 7.0.10
+-- Host: localhost:3306
+-- Generation Time: Dec 16, 2017 at 02:31 PM
+-- Server version: 5.6.35
+-- PHP Version: 7.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
--- Cơ sở dữ liệu: `db_phoneshop`
+-- Database: `phoneshop`
 --
 
 DELIMITER $$
 --
--- Thủ tục
+-- Procedures
 --
 CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_cate_parent_list` ()  BEGIN
-	SELECT  cate.ordinal AS cate_ordinal,
+  SELECT  cate.ordinal AS cate_ordinal,
                             cate.id AS cate_id,
                             cate.name AS cate_name,
                             parent_cate.id AS parent_id,
@@ -38,23 +32,39 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_cate_parent_list` ()  BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_find_id` (IN `_id` INT(11))  BEGIN
-	SELECT * FROM cart WHERE cart.customer_id = _id;
+  SELECT * FROM cart WHERE cart.id = _id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_find_userid` (IN `id` INT)  BEGIN
+  SELECT * FROM cart WHERE cart.customer_id = id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_insert` (IN `_id` INT(11), IN `_total` INT(11))  BEGIN
-	INSERT INTO cart(customer_id,total,created_at,updated_at) VALUES (_id,_total,NOW(),NOW());
+  INSERT INTO cart(customer_id,total,created_at,updated_at) VALUES (_id,_total,NOW(),NOW());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_find_cartid` (IN `id` INT)  BEGIN
+  SELECT * FROM cart_item WHERE cart_id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_find_cartid_proid` (IN `cartid` INT, IN `proid` INT)  BEGIN
+  SELECT * FROM cart_item WHERE cart_item.cart_id = cartid AND cart_item.product_id = proid; 
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_insert` (IN `_cart_id` INT(11), IN `_product_id` INT(11), IN `_quantity` INT(11))  BEGIN
-	INSERT INTO cart_item(cart_id,product_id,quantity,created_at,updated_at) VALUES (_cart_id,_product_id,_quantity,NOW(),NOW());
+  INSERT INTO cart_item(cart_id,product_id,quantity,created_at,updated_at) VALUES (_cart_id,_product_id,_quantity,NOW(),NOW());
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `category_id` (IN `id` INT(11))  BEGIN
-	SELECT * from categories WHERE categories.id = id;
+  SELECT * from categories WHERE categories.id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `clear_cart_items` (IN `id` INT)  BEGIN
+  DELETE FROM cart_item WHERE cart_id = id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `list_categories` ()  BEGIN
-	SELECT cate.id AS cate_id, 
+  SELECT cate.id AS cate_id, 
                             cate.name AS cate_name,
                             cate.parent_id AS parent_id, 
                             parent_cate.name AS parent_name 
@@ -64,11 +74,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `list_categories` ()  BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `list_categories_ID` (IN `id` INT(11))  BEGIN
-	select * from categories where categories.parent_id = id AND categories.id != id;
+  select * from categories where categories.parent_id = id AND categories.id != id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `new_items_list` ()  BEGIN
-	SELECT  product.id AS id,
+  SELECT  product.id AS id,
                                 product.name AS name,
                                 product.image AS image,
                                 product.image1 AS image1,
@@ -83,11 +93,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `new_items_list` ()  BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product` (IN `id` INT(11))  BEGIN
-	select * from products where products.id = id;
+  select * from products where products.id = id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `products_cate_id` (IN `cate_id` INT(11))  BEGIN
-	SELECT * FROM products WHERE products.cate_id = cate_id;
+  SELECT * FROM products WHERE products.cate_id = cate_id;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product_all` ()  BEGIN
@@ -105,7 +115,7 @@ SELECT  product.id AS id,
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product_list` (IN `type` INT(11))  BEGIN
-	SELECT  product.id AS id,
+  SELECT  product.id AS id,
                                 product.name AS name,
                                 product.image AS image,
                                 product.image1 AS image1,
@@ -121,11 +131,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `product_list` (IN `type` INT(11))  
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `related_List` (IN `cate_id` INT(11), IN `id` INT(11))  BEGIN
-	select * from products where products.cate_id = cate_id AND products.id != id LIMIT 7;
+  select * from products where products.cate_id = cate_id AND products.id != id LIMIT 7;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sale_off_list` ()  BEGIN
-	SELECT  product.id AS id,
+  SELECT  product.id AS id,
                                 product.name AS name,
                                 product.image AS image,
                                 product.image1 AS image1,
@@ -141,7 +151,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sale_off_list` ()  BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_cate_parent_list` ()  BEGIN
-	SELECT *
+  SELECT *
         FROM categories
         WHERE id = parent_id
         AND ordinal > 0
@@ -153,7 +163,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `admins`
+-- Table structure for table `admins`
 --
 
 CREATE TABLE `admins` (
@@ -167,7 +177,7 @@ CREATE TABLE `admins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `admins`
+-- Dumping data for table `admins`
 --
 
 INSERT INTO `admins` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
@@ -176,7 +186,7 @@ INSERT INTO `admins` (`id`, `name`, `email`, `password`, `remember_token`, `crea
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `cart`
+-- Table structure for table `cart`
 --
 
 CREATE TABLE `cart` (
@@ -188,16 +198,16 @@ CREATE TABLE `cart` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `cart`
+-- Dumping data for table `cart`
 --
 
 INSERT INTO `cart` (`id`, `customer_id`, `total`, `created_at`, `updated_at`) VALUES
-(17, 1, 35000000, '2017-12-14 09:35:56', '2017-12-14 09:35:56');
+(45, 3, 14000000, '2017-12-16 08:53:31', '2017-12-16 08:53:31');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `cart_item`
+-- Table structure for table `cart_item`
 --
 
 CREATE TABLE `cart_item` (
@@ -210,11 +220,11 @@ CREATE TABLE `cart_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Bẫy `cart_item`
+-- Triggers `cart_item`
 --
 DELIMITER $$
 CREATE TRIGGER `after_cart_item_insert` AFTER INSERT ON `cart_item` FOR EACH ROW BEGIN
-	DECLARE _cart_item_qtt INT;
+  DECLARE _cart_item_qtt INT;
     DECLARE _product_qtt INT;
     DECLARE _cart_item_product_id INT;
     SET _cart_item_product_id = (SELECT product_id FROM cart_item WHERE cart_item.id = NEW.id);
@@ -222,7 +232,7 @@ CREATE TRIGGER `after_cart_item_insert` AFTER INSERT ON `cart_item` FOR EACH ROW
     SET _product_qtt = (SELECT quantity FROM products WHERE products.id = _cart_item_product_id);
     IF (_cart_item_qtt > _product_qtt)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "So luong product khong du";
     END IF;
 END
@@ -232,7 +242,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `categories`
+-- Table structure for table `categories`
 --
 
 CREATE TABLE `categories` (
@@ -245,7 +255,7 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `categories`
+-- Dumping data for table `categories`
 --
 
 INSERT INTO `categories` (`id`, `parent_id`, `name`, `ordinal`, `created_at`, `updated_at`) VALUES
@@ -263,7 +273,7 @@ INSERT INTO `categories` (`id`, `parent_id`, `name`, `ordinal`, `created_at`, `u
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `migrations`
+-- Table structure for table `migrations`
 --
 
 CREATE TABLE `migrations` (
@@ -272,7 +282,7 @@ CREATE TABLE `migrations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `migrations`
+-- Dumping data for table `migrations`
 --
 
 INSERT INTO `migrations` (`migration`, `batch`) VALUES
@@ -283,7 +293,7 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `orders`
+-- Table structure for table `orders`
 --
 
 CREATE TABLE `orders` (
@@ -297,7 +307,7 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `orders`
+-- Dumping data for table `orders`
 --
 
 INSERT INTO `orders` (`id`, `customer_id`, `status`, `total`, `payment`, `created_at`, `updated_at`) VALUES
@@ -306,7 +316,7 @@ INSERT INTO `orders` (`id`, `customer_id`, `status`, `total`, `payment`, `create
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `order_item`
+-- Table structure for table `order_item`
 --
 
 CREATE TABLE `order_item` (
@@ -320,7 +330,7 @@ CREATE TABLE `order_item` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `order_item`
+-- Dumping data for table `order_item`
 --
 
 INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
@@ -331,11 +341,11 @@ INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `cost`, `quantity`, `c
 (13, 1, 2, 400000, 20, '2017-12-15 07:20:55', '2017-12-15 07:20:55');
 
 --
--- Bẫy `order_item`
+-- Triggers `order_item`
 --
 DELIMITER $$
 CREATE TRIGGER `after_order_item_insert` AFTER INSERT ON `order_item` FOR EACH ROW BEGIN
-	DECLARE _order_item_product_id INT;
+  DECLARE _order_item_product_id INT;
     DECLARE _order_item_quantity INT;
     DECLARE _product_quantity INT;
     DECLARE _product_qtt_after INT;
@@ -351,7 +361,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `password_resets`
+-- Table structure for table `password_resets`
 --
 
 CREATE TABLE `password_resets` (
@@ -365,7 +375,7 @@ CREATE TABLE `password_resets` (
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
@@ -385,7 +395,7 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `cate_id`, `detail`, `primary_cost`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
@@ -410,25 +420,25 @@ INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `ca
 (19, 'Asus x441na', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 'asus-x441na-n3350-ga017t-dai-dien-10000-450x300.jpg', 10, 'this is laptop', 5000000, 5000000, 0, '2017-12-04 12:42:22', '2017-12-04 12:42:22');
 
 --
--- Bẫy `products`
+-- Triggers `products`
 --
 DELIMITER $$
 CREATE TRIGGER `after_products_insert` AFTER INSERT ON `products` FOR EACH ROW BEGIN
-	DECLARE _products_quantity INT;
+  DECLARE _products_quantity INT;
     SET _products_quantity = NEW.quantity;
     IF (_products_quantity < 0)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "So luong product khong duoc am";
     END IF;
     IF (NEW.cost < 1000)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "Gia ban khong duoc nho hon 1000";
     END IF;
     IF (NEW.primary_cost < NEW.cost)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "Gia goc khong duoc nho hon gia ban";
     END IF;
 END
@@ -436,21 +446,21 @@ $$
 DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `after_products_update` AFTER UPDATE ON `products` FOR EACH ROW BEGIN
-	DECLARE _products_quantity INT;
+  DECLARE _products_quantity INT;
     SET _products_quantity = NEW.quantity;
     IF (_products_quantity < 0)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "So luong product khong duoc am";
     END IF;
     IF (NEW.cost < 1000)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "Gia ban khong duoc nho hon 1000";
     END IF;
     IF (NEW.primary_cost < NEW.cost)
     THEN
-    	signal sqlstate '45000' 
+      signal sqlstate '45000' 
          set message_text = "Gia goc khong duoc nho hon gia ban";
     END IF;
 END
@@ -460,7 +470,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `slides`
+-- Table structure for table `slides`
 --
 
 CREATE TABLE `slides` (
@@ -475,7 +485,7 @@ CREATE TABLE `slides` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `slides`
+-- Dumping data for table `slides`
 --
 
 INSERT INTO `slides` (`id`, `image`, `title`, `content`, `link`, `ordinal`, `created_at`, `updated_at`) VALUES
@@ -485,7 +495,7 @@ INSERT INTO `slides` (`id`, `image`, `title`, `content`, `link`, `ordinal`, `cre
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -501,32 +511,33 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', '0917218297', 'HoChiMinh City', 'tZZsFSSgJWKVkH4iF9jQYAm8MLNVnCQBUrkjIrD7cWfDXyNbjPFPD8L4oEdv', '2017-12-12 03:49:40', '2017-12-14 02:35:25'),
-(2, 'namcool', 'nam10@gmail.com', '$2y$10$n4XBZapz.jHkSxwamcYrW.MX.90c4DO2VufAre04RxYxk/zXAgsVu', NULL, NULL, 'gFD17rATNyltaupMWCerPZtmjcVU1jZKXvKKM5twiH02CUmHfiuK4Xed8DNj', '2017-12-13 02:26:04', '2017-12-13 02:28:09');
+(2, 'namcool', 'nam10@gmail.com', '$2y$10$n4XBZapz.jHkSxwamcYrW.MX.90c4DO2VufAre04RxYxk/zXAgsVu', NULL, NULL, 'gFD17rATNyltaupMWCerPZtmjcVU1jZKXvKKM5twiH02CUmHfiuK4Xed8DNj', '2017-12-13 02:26:04', '2017-12-13 02:28:09'),
+(3, 'Binh Nguyen', 'quangbinh136@gmail.com', '$2y$10$ZmdQAcVDsquA6EWOtyM8nu0iqAUdFtw7Z.KI8GofZqrUQ3Iq.BbWC', NULL, NULL, 'KkRpa1Uk2ToxLKH4c9omUcma7ip0QGnT9uSyjxQfHpErulFvUxAkiWpY3WMY', '2017-12-15 08:24:27', '2017-12-16 02:48:28');
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `admins`
+-- Indexes for table `admins`
 --
 ALTER TABLE `admins`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `cart`
+-- Indexes for table `cart`
 --
 ALTER TABLE `cart`
   ADD PRIMARY KEY (`id`),
   ADD KEY `customer_id` (`customer_id`);
 
 --
--- Chỉ mục cho bảng `cart_item`
+-- Indexes for table `cart_item`
 --
 ALTER TABLE `cart_item`
   ADD PRIMARY KEY (`id`),
@@ -534,21 +545,21 @@ ALTER TABLE `cart_item`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Chỉ mục cho bảng `categories`
+-- Indexes for table `categories`
 --
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `parent_id` (`parent_id`);
 
 --
--- Chỉ mục cho bảng `orders`
+-- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
   ADD KEY `customer_id` (`customer_id`,`status`);
 
 --
--- Chỉ mục cho bảng `order_item`
+-- Indexes for table `order_item`
 --
 ALTER TABLE `order_item`
   ADD PRIMARY KEY (`id`),
@@ -556,120 +567,116 @@ ALTER TABLE `order_item`
   ADD KEY `product_id` (`product_id`);
 
 --
--- Chỉ mục cho bảng `password_resets`
+-- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`),
   ADD KEY `cate_id` (`cate_id`);
 
 --
--- Chỉ mục cho bảng `slides`
+-- Indexes for table `slides`
 --
 ALTER TABLE `slides`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `admins`
+-- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT cho bảng `cart`
+-- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 --
--- AUTO_INCREMENT cho bảng `cart_item`
+-- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
 --
--- AUTO_INCREMENT cho bảng `categories`
+-- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
--- AUTO_INCREMENT cho bảng `orders`
+-- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT cho bảng `order_item`
+-- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
--- AUTO_INCREMENT cho bảng `password_resets`
+-- AUTO_INCREMENT for table `password_resets`
 --
 ALTER TABLE `password_resets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT cho bảng `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
--- AUTO_INCREMENT cho bảng `slides`
+-- AUTO_INCREMENT for table `slides`
 --
 ALTER TABLE `slides`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
--- AUTO_INCREMENT cho bảng `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- Các ràng buộc cho các bảng đã đổ
+-- Constraints for dumped tables
 --
 
 --
--- Các ràng buộc cho bảng `cart`
+-- Constraints for table `cart`
 --
 ALTER TABLE `cart`
   ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`);
 
 --
--- Các ràng buộc cho bảng `cart_item`
+-- Constraints for table `cart_item`
 --
 ALTER TABLE `cart_item`
   ADD CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `cart` (`id`),
   ADD CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
--- Các ràng buộc cho bảng `orders`
+-- Constraints for table `orders`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `users` (`id`);
 
 --
--- Các ràng buộc cho bảng `order_item`
+-- Constraints for table `order_item`
 --
 ALTER TABLE `order_item`
   ADD CONSTRAINT `order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   ADD CONSTRAINT `order_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`);
 
 --
--- Các ràng buộc cho bảng `products`
+-- Constraints for table `products`
 --
 ALTER TABLE `products`
   ADD CONSTRAINT `products_ibfk_1` FOREIGN KEY (`cate_id`) REFERENCES `categories` (`id`);
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
