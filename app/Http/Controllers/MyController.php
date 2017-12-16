@@ -176,26 +176,46 @@ class MyController extends Controller
     public function getContact(){
         return view('page.contact');  
     }
+
     public function getAddToCart(Request $request){
-        if( isset($request->id) ){
-            $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
-            $cart->add($request->id, $request->quantity);
-            Session::put('cart', $cart);
-            return view('page.cart', ['cart' => $cart->itemList, 'totalPrice' => $cart->totalPrice]);
-        }else{
-            return;
-        }
+        if(isset($request->user()->id)){
+            $cart_id = collect(DB::select('CALL `cart_find_userid`('. $request->user()->id .')'))->first()->id;
+            $item = collect(DB::select('CALL `cart_item_find_cartid_proid`('. $cart_id . ',' . $request->id .')'))->first();
+            if($item) {
+                DB::select('CALL `cart_item_update_quantity`('.$cart_id.','.$request->id.','.($item->quantity+$request->quantity).')');
+            }
+            else {
+                DB::select('CALL `cart_item_insert`('.$cart_id.','.$request->id.','.$request->quantity.')');
+            }
+        }   
+
+        $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
+        $cart->add($request->id, $request->quantity);
+        Session::put('cart', $cart);         
+
+        return view('page.cart', ['cart' => $cart->itemList, 'totalPrice' => $cart->totalPrice]);
+
+        //Still not solve case can't insert db 
     }
 
     public function getRemoveCart(Request $request){
-        if( isset($request->id) ){
-            $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
-            $cart->remove($request->id, $request->quantity);
-            Session::put('cart', $cart);
-            return view('page.cart', ['cart' => $cart->itemList, 'totalPrice' => $cart->totalPrice]);
-        }else{
-            return;
-        }        
+        if(isset($request->user()->id)){
+            $cart_id = collect(DB::select('CALL `cart_find_userid`('. $request->user()->id .')'))->first()->id;
+            $item = collect(DB::select('CALL `cart_item_find_cartid_proid`('. $cart_id . ',' . $request->id .')'))->first();
+            if($item && $item->quantity-$request->quantity > 0) {
+                DB::select('CALL `cart_item_update_quantity`('.$cart_id.','.$request->id.','.($item->quantity-$request->quantity).')');
+            }
+            else {
+                DB::select('CALL `cart_item_delete`('.$cart_id.','.$request->id.')');
+            }            
+        }
+        
+        $cart = ( Session::has('cart') ? new Cart(Session::get('cart')) : new Cart() );
+        $cart->remove($request->id, $request->quantity);
+        Session::put('cart', $cart);
+        
+        return view('page.cart', ['cart' => $cart->itemList, 'totalPrice' => $cart->totalPrice]);
+   
     }
 
     public function refreshCheckout (Request $request){
