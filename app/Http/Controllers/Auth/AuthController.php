@@ -8,6 +8,9 @@ use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Http\Request;
+use Session;
+
 
 class AuthController extends Controller
 {
@@ -22,7 +25,10 @@ class AuthController extends Controller
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesAndRegistersUsers{
+        logout as performLogout;
+    }
+    use ThrottlesLogins;
 
     /**
      * Where to redirect users after login / registration.
@@ -70,6 +76,12 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    protected function logout(Request $request){
+        $this->performLogout($request);
+        Session::forget('cart');
+        return redirect()->back();
     }
 
 }
