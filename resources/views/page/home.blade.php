@@ -310,6 +310,11 @@
 
 
 </div>
+@if(isset($queryException))
+<script type="text/javascript">
+    alert('{{ $queryException }}');
+</script>
+@endif
 @stop
 
 

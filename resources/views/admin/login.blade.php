@@ -84,10 +84,10 @@ License: You must have a valid license purchased only from themeforest(the above
                 <div class="form-group">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">Tên đăng nhập</label>
-                    <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" /> </div>
+                    <input id="email" class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" /> </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Mật khẩu</label>
-                    <input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" /> </div>
+                    <input id="password" class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" /> </div>
                 <div class="form-actions">
                     <button type="submit" class="btn green uppercase">Đăng nhập</button>
                     <label class="rememberme check mt-checkbox mt-checkbox-outline">
@@ -125,6 +125,11 @@ License: You must have a valid license purchased only from themeforest(the above
         <!-- END PAGE LEVEL SCRIPTS -->
         <!-- BEGIN THEME LAYOUT SCRIPTS -->
         <!-- END THEME LAYOUT SCRIPTS -->
+        <script type="text/javascript">
+            $('document').ready(function(){
+                $('#email').focus();
+            });
+        </script>
     </body>
 
 </html>

@@ -118,7 +118,11 @@
     </div>
     <!-- /#wrapper -->  
 
-
+    <script type="text/javascript">
+    $('document').ready(function(){
+        $('#name').focus();    
+    });
+    </script>
 </body>
 
 </html>

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Product;
 use App\CartItem;
+use DB;
 
 class Cart 
 {
@@ -20,6 +21,10 @@ class Cart
 			$this->itemList = array();
 			$this->totalPrice = 0;
 		}
+	}
+
+	public function check_quantity($id, $quantity){
+		return $quantity <= collect(DB::select('CALL `product`(' . $id . ')'))->first()->quantity;
 	}
 
 	public function add($id, $quantity = null){

@@ -94,6 +94,11 @@
     <!-- /#wrapper -->  
 
 <script type="text/javascript">
+
+    $('document').ready(function(){
+        $('#email').focus();    
+    });
+
     var setTypeText = () =>{
         if( $('#password').attr('type') == 'password')
             $('#password').attr('type', 'text');
