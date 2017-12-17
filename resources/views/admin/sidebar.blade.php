@@ -66,15 +66,9 @@
                             </li>
 
                             <li class="heading">
-                                <h3 class="uppercase">Tài khoản</h3>
+                                <h3 class="uppercase">Quản trị</h3>
                             </li>
-                            <li class="nav-item @yield('profileActive')">
-                                <a href="{{ url('admin/profile') }}" class="nav-link">
-                                    <i class="icon-settings"></i>
-                                    <span class="title">Tài khoản của tôi</span>
-                                    @yield('profileSelected')
-                                </a>
-                            </li>
+
                             <li class="nav-item @yield('cartActive')">
                                 <a href="{{ url('admin/cart') }}" class="nav-link">
                                     <i class="fa fa-shopping-cart"></i>

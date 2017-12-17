@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\Product;
 use App\Category;
 use App\Slide;
+use App\Orders;
 
 use Auth;
 
@@ -417,12 +418,9 @@ class AdminController extends Controller
 
     }
 
-    public function profile(){
-    	return view('admin.profile');
-    }
-
-    public function cart(){
-    	return view('admin.cart');
+    public function getCart(){
+        $order_list = Orders::paginate(10);
+    	return view('admin.cart', compact('order_list'));
     }
     
 }

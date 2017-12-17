@@ -128,7 +128,7 @@ Route::get('admin/profile', [
 
 Route::get('admin/cart', [
 	'as' => 'adminCart',
-	'uses' => 'AdminController@cart'
+	'uses' => 'AdminController@getCart'
 ]);
 
 Route::get('admin/login', [
