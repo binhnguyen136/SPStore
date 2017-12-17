@@ -168,15 +168,6 @@ class MyController extends Controller
         
     }
 
-    public function getCheckout(){
-
-        return view('page.checkout');  
-    }
-
-    public function getContact(){
-        return view('page.contact');  
-    }
-
     public function getAddToCart(Request $request){
         if(isset($request->user()->id)){
             $cart_id = collect(DB::select('CALL `cart_find_userid`('. $request->user()->id .')'))->first()->id;
@@ -225,6 +216,47 @@ class MyController extends Controller
         }else{
             return;
         }
+    }
+
+    public function getCheckout(){
+
+        return view('page.checkout');  
+    }
+
+    public function postCheckout(Request $request){
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'address' => 'required',
+            'payment' => 'required'
+        ]);        
+
+        $cart = collect(DB::select('CALL `cart_find_userid`('.Auth::user()->id.')'))->first();
+        if($cart->id){
+            $user = collect(DB::select('CALL `users_find_userid`('.Auth::user()->id.')'))->first();
+            DB::select("CALL `user_update`(".$user->id.",'".$request->name."', '".$request->email."','".$request->phone."','".$request->address."')");
+
+            $itemList = collect(DB::select("CALL `cart_item_product_find_cartid`(".$cart->id.")"));
+
+            $total = 0;
+            foreach($itemList as $item){
+                $total += $item->cost*$item->quantity;
+            }
+            $payment = $request->payment == 1 ? 'COD' : 'credit';
+
+            DB::select("CALL `order_insert`(".$user->id.","."'wait'".",".$total.",'".$payment."')");
+            $order_id = collect(DB::select("CALL `order_find_userid`(".$user->id.")"))->first()->id;
+            
+            foreach($itemList as $item){
+                DB::select("CALL `order_item_insert`(".$order_id.",".$item->product_id.",".$item->cost.",".$item->quantity.")");
+            }
+            Session::flash('success', 'Ordered successfully');
+            return redirect()->back();
+        }else{
+            return redirect()->back();
+        }
+
     }
 
     public function destroySession(){

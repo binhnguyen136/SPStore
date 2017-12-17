@@ -165,6 +165,7 @@ Route::get('/', 'MyController@index');
 
 Route::get('product', 'MyController@getProduct');
 Route::get('checkout', 'MyController@getCheckout');
+Route::post('checkout', 'MyController@postCheckout');
 Route::get('contact', 'MyController@getContact');
 Route::get('picture', 'MyController@getPicture');
 

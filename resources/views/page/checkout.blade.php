@@ -22,12 +22,15 @@
     </div>
 
 
-    <form action="checkout.html" method="POST">
+    <form action="{{ url('checkout') }}" method="POST">
+        {{ csrf_field() }}
         <div class="checkout-wrapper">
             <div class="container">
-
+                @if (Session::has('success'))
+                    <div class="alert alert-info">{{ Session::get('success') }}</div>
+                @endif
                 <div class="text-alert">
-                    <p>Returning customer? <a href="checkout.html#">Click here to login</a>
+                    <p>Returning customer? <a href="{{ url('login') }}">Click here to login</a>
                     </p>
                 </div>
                 <!-- /.text-alert -->
@@ -36,18 +39,27 @@
                     <div class="col-md-6">
                         <h2>Billing Details</h2>
 
+                        @if ($errors->any())
+                        <div class="help-block">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <!-- /.form-group -->
                         <div class="form-group">
                             <label for="first_name">Name <sup>*</sup>
                             </label>
-                            <input type="text" class="form-control dark" id="name" placeholder="Your name" value="{{ Auth::check() ? Auth::user()->name : ''}}">
+                            <input type="text" class="form-control dark" id="name" name="name" value="{{ Auth::check() ? Auth::user()->name : 'Your name'}}">
                         </div>
 
                         <!-- /.form-group -->
 
                         <div class="form-group">
                             <label for="address">Address<sup>*</sup></label>
-                            <input type="text" class="form-control dark" id="address" placeholder="Street Address" value="{{ Auth::check() ? Auth::user()->address : ''}}">
+                            <input type="text" class="form-control dark" id="address" name="address" value="{{ Auth::check() ? Auth::user()->address : 'Street Address'}}">
                         </div>
                         <!-- /.form-group -->
 
@@ -57,7 +69,7 @@
                                 <div class="form-group">
                                     <label for="email_address">Email Address <sup>*</sup>
                                     </label>
-                                    <input type="text" class="form-control dark" id="email_address" placeholder="Email Address" value="{{ Auth::check() ? Auth::user()->email : ''}}">
+                                    <input type="text" class="form-control dark" id="email_address" name="email" value="{{ Auth::check() ? Auth::user()->email : 'Email Address'}}">
                                 </div>
                                 <!-- /.form-group -->
                             </div>
@@ -66,7 +78,7 @@
                                 <div class="form-group">
                                     <label for="phone">Phone <sup>*</sup>
                                     </label>
-                                    <input type="text" class="form-control dark" id="phone" placeholder="Phone" value="{{ Auth::check() ? Auth::user()->phone : ''}}">
+                                    <input type="text" class="form-control dark" id="phone" name="phone" value="{{ Auth::check() ? Auth::user()->phone : 'Phone number'}}">
                                 </div>
                                 <!-- /.form-group -->
                             </div>
@@ -214,7 +226,7 @@
                             <!-- /.cart-checkboxes -->
 
                             <div class="wc-proceed-to-checkout">
-                                <button class="btn btn-lg btn-primary">Check out</button>
+                                <button class="btn btn-lg btn-primary" type="submit">Check out</button>
                             </div>
                             <!-- /.wc-proceed-to-checkout -->
 
