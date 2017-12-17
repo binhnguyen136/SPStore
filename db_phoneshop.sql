@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 16, 2017 at 03:47 PM
+-- Generation Time: Dec 17, 2017 at 03:12 AM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -62,6 +62,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_insert` (IN `_cart_id` IN
   INSERT INTO cart_item(cart_id,product_id,quantity,created_at,updated_at) VALUES (_cart_id,_product_id,_quantity,NOW(),NOW());
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_product_find_cartid` (IN `id` INT)  BEGIN
+  SELECT cart_item.cart_id AS cart_id,
+         cart_item.product_id AS product_id,
+           products.name AS name,
+           cart_item.quantity AS quantity,
+           products.cost AS cost
+    FROM cart_item
+    JOIN products
+    WHERE cart_item.cart_id = id
+    AND cart_item.product_id = products.id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_update_quantity` (IN `cart_id` INT, IN `product_id` INT, IN `quantity` INT)  BEGIN
   UPDATE cart_item 
     SET cart_item.quantity = quantity
@@ -104,6 +116,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `new_items_list` ()  BEGIN
                         ON product.cate_id = category.id
                         ORDER BY product.created_at DESC
                         LIMIT 8;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `order_find_userid` (IN `id` INT)  BEGIN
+  SELECT *
+    FROM orders
+    WHERE orders.customer_id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `order_insert` (IN `customer_id` INT, IN `order_status` VARCHAR(255), IN `total` INT, IN `payment` VARCHAR(255))  BEGIN
+  INSERT INTO orders (`customer_id`, `status`, `total`, `payment`)
+    VALUES(customer_id, order_status, total, payment);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `order_item_insert` (IN `order_id` INT, IN `product_id` INT, IN `cost` INT, IN `quantity` INT)  BEGIN
+  INSERT INTO order_item (`order_id`, `product_id`, `cost`, `quantity`)
+    VALUES (order_id, product_id, cost, quantity);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `product` (IN `id` INT(11))  BEGIN
@@ -164,6 +192,12 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sale_off_list` ()  BEGIN
                         LIMIT 8;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `users_find_userid` (IN `id` INT)  BEGIN
+  SELECT * 
+    FROM users
+    WHERE users.id = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_cate_parent_list` ()  BEGIN
   SELECT *
         FROM categories
@@ -171,6 +205,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `user_cate_parent_list` ()  BEGIN
         AND ordinal > 0
         ORDER BY ordinal;
         END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_update` (IN `id` INT, IN `name` VARCHAR(255), IN `email` VARCHAR(255), IN `phone` VARCHAR(12), IN `address` VARCHAR(255))  BEGIN
+  UPDATE users
+    SET users.name = name,
+      users.email = email,
+        users.phone = phone,
+        users.address = address
+    WHERE users.id = id;
+END$$
 
 DELIMITER ;
 
@@ -238,7 +281,9 @@ CREATE TABLE `cart_item` (
 --
 
 INSERT INTO `cart_item` (`id`, `cart_id`, `product_id`, `quantity`, `created_at`, `updated_at`) VALUES
-(178, 46, 3, 1, '2017-12-16 14:45:52', '2017-12-16 14:45:52');
+(1, 46, 2, 1, '2017-12-17 00:28:47', '2017-12-17 00:28:47'),
+(2, 46, 1, 1, '2017-12-17 00:28:50', '2017-12-17 00:28:50'),
+(3, 46, 3, 1, '2017-12-17 00:28:55', '2017-12-17 00:28:55');
 
 --
 -- Triggers `cart_item`
@@ -332,7 +377,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `customer_id`, `status`, `total`, `payment`, `created_at`, `updated_at`) VALUES
-(1, 1, 'qwer', 134123431, 'COD', '2017-12-14 14:18:09', '2017-12-14 14:18:09');
+(10, 3, 'wait', 14000000, 'COD', '2017-12-17 02:11:57', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -355,11 +400,9 @@ CREATE TABLE `order_item` (
 --
 
 INSERT INTO `order_item` (`id`, `order_id`, `product_id`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
-(2, 1, 1, 4000000, 3, '2017-12-14 14:20:02', '2017-12-14 14:20:02'),
-(10, 1, 2, 4000000, 3, '2017-12-14 14:35:33', '2017-12-14 14:35:33'),
-(11, 1, 4, 5000000, 4, '2017-12-14 14:44:24', '2017-12-14 14:44:24'),
-(12, 1, 1, 400000, 10, '2017-12-15 07:19:38', '2017-12-15 07:19:38'),
-(13, 1, 2, 400000, 20, '2017-12-15 07:20:55', '2017-12-15 07:20:55');
+(20, 10, 2, 5000000, 1, '2017-12-17 02:11:57', '0000-00-00 00:00:00'),
+(21, 10, 1, 4000000, 1, '2017-12-17 02:11:57', '0000-00-00 00:00:00'),
+(22, 10, 3, 5000000, 1, '2017-12-17 02:11:57', '0000-00-00 00:00:00');
 
 --
 -- Triggers `order_item`
@@ -420,9 +463,9 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `image`, `image1`, `image2`, `image3`, `cate_id`, `detail`, `primary_cost`, `cost`, `quantity`, `created_at`, `updated_at`) VALUES
-(1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 4000000, 5, '2017-12-15 09:13:43', '2017-12-15 02:13:43'),
-(2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 50, '2017-12-15 07:45:00', '2017-12-15 00:45:00'),
-(3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 20, '2017-12-15 07:21:09', '2017-12-04 09:04:30'),
+(1, 'Galaxy J7 plus', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 'samsung-galaxy-j7-plus-1-400x460.png', 6, 'this is samsung smart phone', 5000000, 4000000, 2, '2017-12-17 02:11:57', '2017-12-15 02:13:43'),
+(2, 'Galaxy Note FE', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 'samsung-galaxy-note-fe-ha-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 47, '2017-12-17 02:11:57', '2017-12-15 00:45:00'),
+(3, 'Galaxy S8 plus', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 'samsung-galaxy-s8-plus-tim-khoi-400-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 17, '2017-12-17 02:11:57', '2017-12-04 09:04:30'),
 (4, 'Galaxy S8', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 'samsung-galaxy-s8-4-400x460-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:07:44', '2017-12-04 09:07:44'),
 (5, 'Galaxy J7 pro', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 'samsung-galaxy-j7-pro-2323-400x460.png', 6, 'this is samsung smart phone', 5000000, 5000000, 0, '2017-12-04 09:42:58', '2017-12-04 09:42:58'),
 (6, 'Galaxy Note 8', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 'samsung-galaxy-note8-1-400x460.png', 6, 'This is Galaxy Note 8', 5000000, 4000000, 0, '2017-12-13 08:42:57', '2017-12-13 01:42:57'),
@@ -538,7 +581,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `phone`, `address`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'nam', 'nam@gmail.com', '$2y$10$Yh5GWoyIWl1mSoxnP10PjekHXln0sYr4WBw8pMGaEnxSia0LrFTXS', '0917218297', 'HoChiMinh City', 'tZZsFSSgJWKVkH4iF9jQYAm8MLNVnCQBUrkjIrD7cWfDXyNbjPFPD8L4oEdv', '2017-12-12 03:49:40', '2017-12-14 02:35:25'),
 (2, 'namcool', 'nam10@gmail.com', '$2y$10$n4XBZapz.jHkSxwamcYrW.MX.90c4DO2VufAre04RxYxk/zXAgsVu', NULL, NULL, 'gFD17rATNyltaupMWCerPZtmjcVU1jZKXvKKM5twiH02CUmHfiuK4Xed8DNj', '2017-12-13 02:26:04', '2017-12-13 02:28:09'),
-(3, 'Binh Nguyen', 'quangbinh136@gmail.com', '$2y$10$ZmdQAcVDsquA6EWOtyM8nu0iqAUdFtw7Z.KI8GofZqrUQ3Iq.BbWC', NULL, NULL, 'DMBjAamsvWM1jmSEMliFhfnSaTmV3KbbTR1JYCXAZHDkOgFehl4vKq6EEljN', '2017-12-15 08:24:27', '2017-12-16 07:45:41');
+(3, 'Binh Nguyen', 'quangbinh136@gmail.com', '$2y$10$ZmdQAcVDsquA6EWOtyM8nu0iqAUdFtw7Z.KI8GofZqrUQ3Iq.BbWC', '0934931586', '114 tran van dang', 'DMBjAamsvWM1jmSEMliFhfnSaTmV3KbbTR1JYCXAZHDkOgFehl4vKq6EEljN', '2017-12-15 08:24:27', '2017-12-16 07:45:41');
 
 --
 -- Indexes for dumped tables
@@ -630,7 +673,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `categories`
 --
@@ -640,12 +683,12 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `order_item`
 --
 ALTER TABLE `order_item`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `password_resets`
 --
