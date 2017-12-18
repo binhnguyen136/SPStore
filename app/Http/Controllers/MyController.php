@@ -219,8 +219,11 @@ class MyController extends Controller
     }
 
     public function getCheckout(){
-
-        return view('page.checkout');  
+        if(Auth::check()){
+            return view('page.checkout'); 
+        }else{
+            return redirect('login');
+        } 
     }
 
     public function postCheckout(Request $request){
