@@ -110,7 +110,6 @@
 
                                         <div class="cart-action">
                                             <a href="{{ url('checkout') }}" title="" class="btn btn-lg btn-dark btn-outline btn-block">View all cart</a>
-                                            <a href="{{ url('checkout') }}" class="btn btn-lg btn-primary btn-block hidden">Proceed To Checkout</a>
                                         </div>
                                     </div>
                                 </li>
