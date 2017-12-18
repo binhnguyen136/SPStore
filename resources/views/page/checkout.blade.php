@@ -52,14 +52,14 @@
                         <div class="form-group">
                             <label for="first_name">Name <sup>*</sup>
                             </label>
-                            <input type="text" class="form-control dark" id="name" name="name" value="{{ Auth::check() ? Auth::user()->name : 'Your name'}}">
+                            <input type="text" class="form-control dark" id="name" name="name" value="{{ Auth::check() ? Auth::user()->name : ''}}">
                         </div>
 
                         <!-- /.form-group -->
 
                         <div class="form-group">
                             <label for="address">Address<sup>*</sup></label>
-                            <input type="text" class="form-control dark" id="address" name="address" value="{{ Auth::check() ? Auth::user()->address : 'Street Address'}}">
+                            <input type="text" class="form-control dark" id="address" name="address" value="{{ Auth::check() ? Auth::user()->address : ''}}">
                         </div>
                         <!-- /.form-group -->
 
@@ -69,7 +69,7 @@
                                 <div class="form-group">
                                     <label for="email_address">Email Address <sup>*</sup>
                                     </label>
-                                    <input type="text" class="form-control dark" id="email_address" name="email" value="{{ Auth::check() ? Auth::user()->email : 'Email Address'}}">
+                                    <input type="text" class="form-control dark" id="email_address" name="email" value="{{ Auth::check() ? Auth::user()->email : ''}}">
                                 </div>
                                 <!-- /.form-group -->
                             </div>
@@ -78,7 +78,7 @@
                                 <div class="form-group">
                                     <label for="phone">Phone <sup>*</sup>
                                     </label>
-                                    <input type="text" class="form-control dark" id="phone" name="phone" value="{{ Auth::check() ? Auth::user()->phone : 'Phone number'}}">
+                                    <input type="text" class="form-control dark" id="phone" name="phone" value="{{ Auth::check() ? Auth::user()->phone : ''}}">
                                 </div>
                                 <!-- /.form-group -->
                             </div>
