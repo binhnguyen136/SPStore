@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 17, 2017 at 04:09 AM
+-- Generation Time: Dec 18, 2017 at 04:57 AM
 -- Server version: 5.6.35
 -- PHP Version: 7.0.15
 
@@ -58,9 +58,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_find_cartid_proid` (IN `c
   SELECT * FROM cart_item WHERE cart_item.cart_id = cartid AND cart_item.product_id = proid; 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_insert` (IN `_cart_id` INT(11), IN `_product_id` INT(11), IN `_quantity` INT(11))  BEGIN
-  INSERT INTO cart_item(cart_id,product_id,quantity,created_at,updated_at) VALUES (_cart_id,_product_id,_quantity,NOW(),NOW());
-END$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_insert` (IN `_cart_id` INT(11), IN `_product_id` INT(11), IN `_quantity` INT(11))  begin
+  declare item_remain int;
+
+  start transaction;
+
+  set item_remain = (select quantity from products where products.id = _product_id for update);
+  -- test
+  do sleep(10);
+
+    if (_quantity > item_remain)
+    then
+    signal sqlstate '45000' set message_text = 'So luong san pham khong du';
+    end if;
+
+  insert into cart_item(cart_id, product_id, quantity, created_at, updated_at) values (_cart_id, _product_id, _quantity, now(), now());
+  update products set products.quantity = products.quantity - _quantity where products.id = _product_id;
+
+  commit;
+end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `cart_item_product_find_cartid` (IN `id` INT)  BEGIN
   SELECT cart_item.cart_id AS cart_id,
